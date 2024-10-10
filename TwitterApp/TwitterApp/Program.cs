@@ -14,6 +14,8 @@ builder.Services.AddDbContext<TwitterContext>(options => {
 
 var app = builder.Build();
 
+SeedData.TestDatasFill(app);
+
 
 
 
