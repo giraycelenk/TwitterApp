@@ -1,0 +1,29 @@
+body {
+    background-color: #f5f8fa;
+}
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.twitter-logo {
+    width: 50px;
+    margin-bottom: 20px;
+}
+.form-control {
+    margin-bottom: 15px;
+}
+.btn-primary {
+    background-color: #1da1f2;
+    border-color: #1da1f2;
+}
+.text-center a {
+    color: #1da1f2;
+    text-decoration: none;
+}
+.text-center a:hover {
+    text-decoration: underline;
+}

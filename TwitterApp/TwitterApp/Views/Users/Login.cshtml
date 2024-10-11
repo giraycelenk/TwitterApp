@@ -1,0 +1,19 @@
+@model LoginViewModel
+<div class="login-container text-center">
+    <img src="https://abs.twimg.com/icons/apple-touch-icon-192x192.png" alt="Twitter Logo" class="twitter-logo">
+    <h3 class="mb-4">Login to Twitter</h3>
+    <form action="Login" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input asp-for="Email" class="form-control" placeholder="Email" >
+        <input asp-for="Password" class="form-control" placeholder="Password">
+        <button type="submit" class="btn btn-primary btn-block w-100">Log In</button>
+        <div class="form-text text-center mt-3">
+            <a href="#">Forgot password?</a>
+        </div>
+    </form>
+    <hr>
+    <div class="text-center">
+        <p>Don't have an account? <a href="#">Sign up for Twitter</a></p>
+    </div>
+</div>
+

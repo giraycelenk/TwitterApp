@@ -18,8 +18,8 @@ namespace TwitterApp.Data.Concrete.EfCore
                 if(!context.Users.Any())
                 {
                     context.Users.AddRange(
-                        new User { UserId = 1, Username = "giraycelenk"},
-                        new User { UserId = 2, Username = "testkullanici"}
+                        new User { UserId = 1, Username = "giraycelenk", Name = "Giray Çelenk", Email="a.giraycelenk@hotmail.com", Password = "123456",Image = "twitteregg.jpg"},
+                        new User { UserId = 2,Username = "testkullanici", Name = "Test Kullanıcı",Email="testkullanici123@hotmail.com", Password = "123456",Image = "twitteregg.jpg"}
                     );
                 }
                 if(!context.Tweets.Any())

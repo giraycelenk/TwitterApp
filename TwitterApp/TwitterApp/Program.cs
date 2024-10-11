@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using TwitterApp.Data.Abstract;
 using TwitterApp.Data.Concrete.EfCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,11 +14,18 @@ builder.Services.AddDbContext<TwitterContext>(options => {
     options.UseSqlite(connectionString);
 });
 
+builder.Services.AddScoped<IUserRepository, EfUserRepository>();
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
 var app = builder.Build();
 
 SeedData.TestDatasFill(app);
 
-
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 
