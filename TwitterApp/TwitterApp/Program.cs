@@ -15,6 +15,7 @@ builder.Services.AddDbContext<TwitterContext>(options => {
 });
 
 builder.Services.AddScoped<IUserRepository, EfUserRepository>();
+builder.Services.AddScoped<ITweetRepository, EfTweetRepository>();
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();

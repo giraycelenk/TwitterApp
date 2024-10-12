@@ -1,33 +1,36 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TwitterApp.Data.Abstract;
+using TwitterApp.Entity;
 using TwitterApp.Models;
 
 namespace TwitterApp.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    private readonly IUserRepository _userRepository;
+    private readonly ITweetRepository _tweetRepository;
+    public HomeController(IUserRepository userRepository,ITweetRepository tweetRepository)
     {
-        _logger = logger;
+        _userRepository = userRepository;
+        _tweetRepository = tweetRepository;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         var claims = User.Claims;
-        
-        return View();
-    }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        var tweets = _tweetRepository
+                    .Tweets
+                    .Where(t => t.IsDeleted == false)
+                    .Include(t => t.User);
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+
+        return View(new TweetViewModel{Tweets = await tweets.OrderByDescending(t => t.TweetDate).ToListAsync()});
     }
+    
+    
+
+    
 }

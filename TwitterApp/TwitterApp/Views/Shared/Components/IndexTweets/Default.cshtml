@@ -1,0 +1,46 @@
+@model TweetViewModel
+@foreach(var tweet in Model.Tweets)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-start align-items-center">
+                <h5 class="card-title mb-0 me-3">@tweet.User.Name</h5>
+                @tweet.User.Username · 
+                    @{
+                        // Tweet tarihini DateTime olarak al
+                        DateTime tweetDate = @tweet.TweetDate;
+                    
+                        // Şu anki zamanı al
+                        DateTime now = DateTime.Now;
+                    
+                        // Zaman farkını hesapla
+                        TimeSpan timeDifference = now - tweetDate;
+                    
+                        // Göstereceğin metni hazırla
+                        string timeAgo;
+                    
+                        if (timeDifference.TotalMinutes < 60) // 1 saatten azsa dakika olarak
+                        {
+                            timeAgo = $"{(int)timeDifference.TotalMinutes}m";
+                        }
+                        else if (timeDifference.TotalHours < 24) // 1 saatten fazla ama 24 saatten azsa saat olarak
+                        {
+                            timeAgo = $"{(int)timeDifference.TotalHours}h";
+                        }
+                        else // 24 saatten fazlaysa gün olarak
+                        {
+                            timeAgo = $"{(int)timeDifference.TotalDays}d";
+                        }
+                    }
+                    @timeAgo
+                
+            </div>
+            <p class="card-text">@tweet.Content</p>
+            <div>
+                <a href="#" class="btn btn-outline-primary btn-sm">Like</a>
+                <a href="#" class="btn btn-outline-primary btn-sm">Retweet</a>
+                <a href="#" class="btn btn-outline-primary btn-sm">Reply</a>
+            </div>
+        </div>
+    </div>
+}
