@@ -2,12 +2,7 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-3">
-            <ul class="list-group">
-                <li class="list-group-item">Home</li>
-                <li class="list-group-item">Explore</li>
-                <li class="list-group-item">Notifications</li>
-                <li class="list-group-item">Messages</li>
-            </ul>
+            <vc:index-side-bar></vc:index-side-bar>
         </div>
         <div class="col-md-6">
             <form action="/Home/Index" method="post">
@@ -16,7 +11,7 @@
                         <textarea class="form-control" name="Content" placeholder="What's happening?" rows="3" maxlength="280" oninput="updateCharCount(this)" ></textarea>
                         <div class="mt-2 d-flex justify-content-end align-items-center">
                             <small id="charCount" class="text-muted me-2">280 characters</small>
-                            <button class="btn btn-primary">Tweet</button>
+                            <button class="btn btn-primary custom-tweet-btn">Tweet</button>
                         </div>
                     </div>
                 </div>
@@ -24,16 +19,7 @@
             <vc:index-tweets></vc:index-tweets>
         </div>
         <div class="col-md-3">
-            <div class="card">
-                <div class="card-header">
-                    Trends for you
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">#Trending1</li>
-                    <li class="list-group-item">#Trending2</li>
-                    <li class="list-group-item">#Trending3</li>
-                </ul>
-            </div>
+            <vc:index-trends></vc:index-trends>
         </div>
     </div>
 </div>

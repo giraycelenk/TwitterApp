@@ -1,0 +1,41 @@
+@model TweetViewModel
+@foreach(var tweet in Model.Tweets)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-start align-items-center">
+                    <img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/> 
+                    <h6 class="card-title mb-0 me-3">@tweet.User.Name</h6>
+                    <small>@tweet.User.Username · 
+                        @{
+                            DateTime tweetDate = @tweet.TweetDate;
+                            DateTime now = DateTime.Now;
+                            TimeSpan timeDifference = now - tweetDate;
+                            string timeAgo;
+                        
+                            if (timeDifference.TotalMinutes < 60) 
+                            {
+                                timeAgo = $"{(int)timeDifference.TotalMinutes}m";
+                            }
+                            else if (timeDifference.TotalHours < 24) 
+                            {
+                                timeAgo = $"{(int)timeDifference.TotalHours}h";
+                            }
+                            else 
+                            {
+                                timeAgo = $"{(int)timeDifference.TotalDays}d";
+                            }
+                        }
+                        @timeAgo
+                    </small>
+                
+            </div>
+            <p class="card-text">@tweet.Content</p>
+            <div>
+                <a href="#" class="btn btn-outline-primary btn-sm">Like</a>
+                <a href="#" class="btn btn-outline-primary btn-sm">Retweet</a>
+                <a href="#" class="btn btn-outline-primary btn-sm">Reply</a>
+            </div>
+        </div>
+    </div>
+}

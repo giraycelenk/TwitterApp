@@ -48,9 +48,8 @@ public class HomeController : Controller
                     User = user ?? new User(),
                 });
             }
-            
         }
-        return View();
+        return RedirectToAction("Index"); 
     }
 
 }
