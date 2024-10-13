@@ -33,6 +33,7 @@ namespace TwitterApp.Controllers
                     userClaims.Add(new Claim(ClaimTypes.NameIdentifier, isUser.UserId.ToString()));
                     userClaims.Add(new Claim(ClaimTypes.Name, isUser.Username));
                     userClaims.Add(new Claim(ClaimTypes.GivenName, isUser.Name ?? ""));
+                    userClaims.Add(new Claim(ClaimTypes.UserData,isUser.Image ?? ""));
 
                     var claimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 

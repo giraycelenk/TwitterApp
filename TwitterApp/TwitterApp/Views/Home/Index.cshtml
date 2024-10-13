@@ -1,6 +1,6 @@
-﻿<div class="container mt-4">
+﻿@model TweetViewModel
+<div class="container mt-4">
     <div class="row">
-        <!-- Left Sidebar -->
         <div class="col-md-3">
             <ul class="list-group">
                 <li class="list-group-item">Home</li>
@@ -9,21 +9,20 @@
                 <li class="list-group-item">Messages</li>
             </ul>
         </div>
-
-        <!-- Feed -->
         <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <textarea class="form-control" placeholder="What's happening?" rows="3"></textarea>
-                    <button class="btn btn-primary mt-2" style="float: right;">Tweet</button>
+            <form action="/Home/Index" method="post">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <textarea class="form-control" name="Content" placeholder="What's happening?" rows="3" maxlength="280" oninput="updateCharCount(this)" ></textarea>
+                        <div class="mt-2 d-flex justify-content-end align-items-center">
+                            <small id="charCount" class="text-muted me-2">280 characters</small>
+                            <button class="btn btn-primary">Tweet</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Tweets -->
+            </form>
             <vc:index-tweets></vc:index-tweets>
         </div>
-
-        <!-- Right Sidebar -->
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header">
