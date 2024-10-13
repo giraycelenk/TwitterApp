@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TwitterApp.Data.Abstract;
 using TwitterApp.Models;
 
-namespace TwitterApp.ViewComponents.Index
+namespace TwitterApp.ViewComponents
 {
     public class IndexSideBar:ViewComponent
     {
