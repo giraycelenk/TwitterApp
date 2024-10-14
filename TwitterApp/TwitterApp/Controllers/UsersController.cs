@@ -2,7 +2,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TwitterApp.Data.Abstract;
+using TwitterApp.Entity;
 using TwitterApp.Models;
 
 namespace TwitterApp.Controllers
@@ -58,9 +60,36 @@ namespace TwitterApp.Controllers
             }
             return View(model);
         }
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile(string username)
         {
-            return View();
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+            
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return RedirectToAction("Login", "Users");
+            }
+            
+            if (string.IsNullOrEmpty(username))
+            {
+                return NotFound();
+            }
+            
+            var user = await _userRepository.Users.FirstOrDefaultAsync(x => x.Username == username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var tweets = _userRepository.GetTweetsByUserId(user.UserId);
+            var viewModel = new ProfileViewModel
+            {
+                User = user,
+                Tweets = tweets
+            };
+            return View(viewModel);      
         }
     }
 }

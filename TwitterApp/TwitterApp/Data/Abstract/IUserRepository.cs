@@ -10,6 +10,7 @@ namespace TwitterApp.Data.Abstract
         List<Tweet> GetTweetsByUserId(int UserId);
         List<User> GetFollowers(int UserId);
         List<User> GetFollowings(int UserId);
-        
+        public int GetIdByUsername(string userName);
+
     }
 }

@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TwitterApp.Data.Abstract;
 using TwitterApp.Entity;
+using TwitterApp.ViewComponents;
 
 namespace TwitterApp.Data.Concrete.EfCore
 {
@@ -25,14 +27,23 @@ namespace TwitterApp.Data.Concrete.EfCore
             var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
             return user ?? new();
         }
+        public int GetIdByUsername(string userName)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Username == userName);
+            if(user != null)
+            {
+                return user.UserId;
+            }
+            return 0;
+        }
         public List<Tweet> GetTweetsByUserId(int userId)
         {
-            var user = GetUserById(userId);
-            if (user == null)
-            {
-                return new List<Tweet>();
-            }
-            return user.Tweets;
+            var tweets = _context.Tweets 
+                    .Where(t => t.UserId == userId) 
+                    .OrderByDescending(t => t.TweetDate) 
+                    .ToList();
+            
+            return tweets ?? new List<Tweet>(); 
         }
 
         public List<User> GetFollowers(int userId)
