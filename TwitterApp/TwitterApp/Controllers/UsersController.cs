@@ -58,5 +58,9 @@ namespace TwitterApp.Controllers
             }
             return View(model);
         }
+        public IActionResult Profile()
+        {
+            return View();
+        }
     }
 }

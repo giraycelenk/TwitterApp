@@ -1,0 +1,25 @@
+.cover-photo {
+    height: 200px;
+    background: url('~/img/twitteregg.jpg') no-repeat center center;
+    background-size: cover;
+}
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid white;
+    position: relative; 
+    top: -35px; 
+    left: 0px; 
+    z-index: 1; 
+}
+.bio {
+    margin-top: 1px; 
+    
+}
+.bio h3 {
+    margin: 0; 
+}
+.bio p {
+    margin: 5px 0; 
+}

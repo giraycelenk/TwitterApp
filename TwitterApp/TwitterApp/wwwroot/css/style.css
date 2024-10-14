@@ -38,3 +38,45 @@ body {
     border: 2px solid white; 
     margin-right: 10px; 
 }
+.cover-photo {
+    height: 200px;
+    background: url('~/img/twitteregg.jpg') no-repeat center center;
+    background-size: cover;
+}
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    position: absolute;
+    top: 150px;
+    left: 20px;
+    border: 3px solid white;
+}
+.bio {
+    margin-top: 100px;
+}
+.custom-container {
+    padding-top: 0; 
+    padding-bottom: 0; 
+    margin-top: 0;
+}
+.tweet-card {
+    margin-bottom: 0;
+}
+.trends {
+    margin-left: 15px; 
+    border-radius: 25px; 
+    overflow: hidden; 
+}
+.list-group-item {
+    border: none; 
+}
+
+.list-group-item:hover {
+    background-color: #f0f0f0; 
+    border-radius: 25px; 
+}
+.card-header{
+    background-color: #ffffff; 
+    border: none; 
+}

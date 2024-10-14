@@ -1,26 +1,15 @@
 ﻿@model TweetViewModel
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-3">
-            <vc:index-side-bar></vc:index-side-bar>
-        </div>
-        <div class="col-md-6">
-            <form action="/Home/Index" method="post">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <textarea class="form-control" name="Content" placeholder="What's happening?" rows="3" maxlength="280" oninput="updateCharCount(this)" ></textarea>
-                        <div class="mt-2 d-flex justify-content-end align-items-center">
-                            <small id="charCount" class="text-muted me-2">280 characters</small>
-                            <button class="btn btn-primary custom-tweet-btn">Tweet</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <vc:index-tweets></vc:index-tweets>
-        </div>
-        <div class="col-md-3">
-            <vc:index-trends></vc:index-trends>
+<form action="/Home/Index" method="post">
+    <div class="card">
+        <div class="card-body">
+            <textarea class="form-control" name="Content" placeholder="What's happening?" rows="3" maxlength="280" oninput="updateCharCount(this)" ></textarea>
+            <div class="mt-2 d-flex justify-content-end align-items-center">
+                <small id="charCount" class="text-muted me-2">280 characters</small>
+                <button class="btn btn-primary custom-tweet-btn">Tweet</button>
+            </div>
         </div>
     </div>
-</div>
+</form>
+<vc:tweets></vc:tweets>
+            
 

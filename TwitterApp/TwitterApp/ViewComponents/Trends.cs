@@ -6,10 +6,10 @@ using TwitterApp.Models;
 
 namespace TwitterApp.ViewComponents
 {
-    public class IndexSideBar:ViewComponent
+    public class Trends:ViewComponent
     {
         
-        public IndexSideBar()
+        public Trends()
         {
             
         }

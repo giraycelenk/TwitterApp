@@ -1,7 +1,7 @@
 @model TweetViewModel
 @foreach(var tweet in Model.Tweets)
 {
-    <div class="card mb-3">
+    <div class="card tweet-card">
         <div class="card-body">
             <div class="d-flex justify-content-start align-items-center">
                     <img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/> 

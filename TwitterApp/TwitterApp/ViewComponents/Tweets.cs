@@ -6,10 +6,10 @@ using TwitterApp.Models;
 
 namespace TwitterApp.ViewComponents
 {
-    public class IndexTweets:ViewComponent
+    public class Tweets:ViewComponent
     {
         private ITweetRepository _tweetRepository;
-        public IndexTweets(ITweetRepository tweetRepository)
+        public Tweets(ITweetRepository tweetRepository)
         {
             _tweetRepository = tweetRepository;
         }
