@@ -2,7 +2,18 @@
 <link rel="stylesheet" href="~/css/profile.css">
 <div class="container">
     <div class="cover-photo"></div>
-    <img src="~/img/twitteregg.jpg" alt="Profil Fotoğrafı" class="profile-photo">
+    <div class="d-flex align-items-center">
+        <img src="~/img/twitteregg.jpg" alt="Profil Fotoğrafı" class="profile-photo">
+        @if (User.Identity != null && User.Identity.IsAuthenticated && Model.User.UserId != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+        {
+            <form method="post" asp-action="@(Model.IsFollowing ? "Unfollow" : "Follow")" asp-controller="Users" class="ms-auto">
+                <input type="hidden" name="@(Model.IsFollowing ? "userIdToUnfollow" : "userIdToFollow")" value="@Model.User.UserId"/>
+                <button type="submit" class="btn @(Model.IsFollowing ? "btn-danger" : "btn-primary") btn-follow-unfollow-custom">
+                    @(Model.IsFollowing ? "Unfollow" : "Follow")
+                </button>
+            </form>
+        }
+    </div>
     <div class="bio">
         <h3>@Model.User.Name</h3>
         <span class="text-muted">@Model.User.Username</span>
@@ -16,7 +27,7 @@
         <p><strong>Location </strong>@Model.User.Location</p>
     </div>
     <div class="mt-3">
-        <strong>@Model.User.Followers.Count() Followers</strong>
+        <strong class="followers-count">@Model.User.Followers.Count() Followers</strong> 
         <strong>@Model.User.Following.Count() Following</strong>
         <strong>@Model.User.Tweets.Count() Tweet</strong>
     </div>

@@ -83,18 +83,76 @@ namespace TwitterApp.Controllers
                 return NotFound();
             }
             
-            var user = await _userRepository.Users.FirstOrDefaultAsync(x => x.Username == username);
+            var user = await _userRepository.Users
+                                    .Include(u => u.Followers)
+                                    .Include(u => u.Following)
+                                    .FirstOrDefaultAsync(x => x.Username == username);
             if (user == null)
             {
                 return NotFound();
             }
+
+            var currentUserId = int.Parse(userIdClaim);
+            var currentUser = await _userRepository.Users
+                                    .Include(u => u.Followers)
+                                    .Include(u => u.Following)
+                                    .FirstOrDefaultAsync(x => x.UserId == currentUserId);
+
+            if (currentUser == null)
+            {
+                return RedirectToAction("Login", "Users");
+            }
+
+            var isFollowing = currentUser.Following.Any(f => f.FollowingUserId == user.UserId); 
+
             var tweets = _userRepository.GetTweetsByUserId(user.UserId);
             var viewModel = new ProfileViewModel
             {
                 User = user,
-                Tweets = tweets
+                Tweets = tweets,
+                IsFollowing = isFollowing
             };
             return View(viewModel);      
+        }
+        public async Task<IActionResult> Follow(int userIdToFollow)
+        {
+            var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var user = _userRepository.GetUserById(userIdToFollow); 
+
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not found." });
+            }
+
+           
+            bool isFollowing = await _userRepository.FollowUserAsync(currentUserId, userIdToFollow);
+            
+            return Json(new { success = true, isFollowing = true, username = user.Username });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Unfollow(int userIdToUnfollow)
+        {
+            var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            try
+            {
+                var existingFollow = await _userRepository.GetFollowAsync(currentUserId, userIdToUnfollow);
+
+                if (existingFollow == null)
+                {
+                    return Json(new { success = false, message = "You are not following this user." });
+                }
+
+                var unfollowed = await _userRepository.UnfollowUserAsync(currentUserId, userIdToUnfollow);
+                var user = _userRepository.GetUserById(userIdToUnfollow); 
+                
+                return Json(new { success = true, isFollowing = false, username = user?.Username });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
     }
 }

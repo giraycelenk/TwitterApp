@@ -16,7 +16,7 @@ namespace TwitterApp.Entity
         public List<Like> Likes { get; set; } = new List<Like>();
         public List<Retweet> Retweets { get; set; } = new List<Retweet>();
         public List<Mention> Mentions { get; set; } = new List<Mention>();
-        public List<User> Followers { get; set; } = new List<User>(); 
-        public List<User> Following { get; set; } = new List<User>();
+        public List<UserFollow> Followers { get; set; } = new List<UserFollow>(); 
+        public List<UserFollow> Following { get; set; } = new List<UserFollow>();
     }
 }

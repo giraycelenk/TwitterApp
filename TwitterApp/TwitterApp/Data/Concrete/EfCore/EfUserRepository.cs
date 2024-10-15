@@ -48,21 +48,71 @@ namespace TwitterApp.Data.Concrete.EfCore
 
         public List<User> GetFollowers(int userId)
         {
-            var user = GetUserById(userId);
-            if (user == null)
-            {
-                return new List<User>();
-            }
-            return user.Followers;
+            var userFollows = _context
+                        .UserFollows
+                        .Where(uf => uf.FollowingUserId == userId)
+                        .ToList();
+
+            return userFollows.Select(uf => uf.FollowerUser).ToList();
         }
         public List<User> GetFollowings(int userId)
         {
-            var user = GetUserById(userId);
-            if (user == null)
+            var userFollows = _context
+                                .UserFollows
+                                .Where(uf => uf.FollowerUserId == userId)
+                                .ToList();
+
+            return userFollows.Select(uf => uf.FollowingUser).ToList();
+        }
+        public async Task<bool> IsFollowing(int followerUserId, int followingUserId)
+        {
+            return await _context
+                        .UserFollows
+                        .AnyAsync(uf => uf.FollowerUserId == followerUserId && uf.FollowingUserId == followingUserId);
+        }
+
+        public async Task<bool> FollowUserAsync(int currentUserId, int userIdToFollow)
+        {
+            
+            var existingFollow = await _context
+                                        .UserFollows
+                                        .FirstOrDefaultAsync(f => f.FollowerUserId == currentUserId && f.FollowingUserId == userIdToFollow);
+            
+            if (existingFollow != null)
             {
-                return new List<User>();
+                return false; 
             }
-            return user.Following;
+
+            var newFollow = new UserFollow
+            {
+                FollowerUserId = currentUserId,
+                FollowingUserId = userIdToFollow
+            };
+
+            await _context.UserFollows.AddAsync(newFollow); 
+            await _context.SaveChangesAsync();
+
+            return true; 
+        }
+
+        public async Task<bool> UnfollowUserAsync(int currentUserId, int userIdToUnfollow)
+        {
+            var followRelation = await _context.UserFollows
+                .FirstOrDefaultAsync(f => f.FollowerUserId == currentUserId && f.FollowingUserId == userIdToUnfollow);
+            
+            if (followRelation != null)
+            {
+                _context.UserFollows.Remove(followRelation);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+        public async Task<UserFollow> GetFollowAsync(int followerUserId, int followingUserId)
+        {
+            return await _context.UserFollows
+                                .FirstOrDefaultAsync(f => f.FollowerUserId == followerUserId && f.FollowingUserId == followingUserId);
         }
     }
 }

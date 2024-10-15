@@ -11,6 +11,10 @@ namespace TwitterApp.Data.Abstract
         List<User> GetFollowers(int UserId);
         List<User> GetFollowings(int UserId);
         public int GetIdByUsername(string userName);
+        Task<bool> FollowUserAsync(int followerUserId, int followingUserId);
+        Task<bool> UnfollowUserAsync(int currentUserId, int userIdToUnfollow);
+        Task<UserFollow> GetFollowAsync(int followerUserId, int followingUserId);
+        
 
     }
 }
