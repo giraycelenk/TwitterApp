@@ -33,25 +33,30 @@ public class HomeController : Controller
     }
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> Index(TweetCreateModel tweet)
+    public async Task<IActionResult> CreateTweet(TweetCreateModel tweet)
     {
-
-        if(ModelState.IsValid)
+        if (ModelState.IsValid)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if(!string.IsNullOrEmpty(userId))
+            if (!string.IsNullOrEmpty(userId))
             {
-                var user = await _userRepository.Users.FirstOrDefaultAsync(u => u.UserId == Convert.ToInt32(userId ?? ""));
-                _tweetRepository.CreateTweet(new Tweet {
-                    Content = tweet.Content,
-                    TweetDate = DateTime.Now,
-                    IsDeleted = false,
-                    UserId = Convert.ToInt32(userId),
-                    User = user ?? new User(),
-                });
+                var user = await _userRepository.Users.FirstOrDefaultAsync(u => u.UserId == Convert.ToInt32(userId));
+                
+                if (!string.IsNullOrEmpty(tweet.Content))
+                {
+                    _tweetRepository.CreateTweet(new Tweet
+                    {
+                        Content = tweet.Content,
+                        TweetDate = DateTime.Now,
+                        IsDeleted = false,
+                        UserId = Convert.ToInt32(userId),
+                        User = user ?? new User(),
+                    });
+                }
             }
         }
-        return RedirectToAction("Index"); 
+
+        return RedirectToAction("Index");
     }
     
 
