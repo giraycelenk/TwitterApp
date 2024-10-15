@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -8,14 +9,19 @@ namespace TwitterApp.ViewComponents
 {
     public class SideBar:ViewComponent
     {
-        
-        public SideBar()
+        private readonly IUserRepository _userRepository;
+        public SideBar(IUserRepository userRepository)
         {
-            
+            _userRepository = userRepository;
         }
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
-            return View();
+            var claimsPrincipal = User as ClaimsPrincipal;
+            var userIdClaim = Convert.ToInt32(claimsPrincipal?.FindFirstValue(ClaimTypes.NameIdentifier));
+            
+            var user = _userRepository.GetUserById(userIdClaim);
+
+            return View(user);
         }
     }
 }

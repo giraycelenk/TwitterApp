@@ -60,6 +60,11 @@ namespace TwitterApp.Controllers
             }
             return View(model);
         }
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
+        }
         public async Task<IActionResult> Profile(string username)
         {
             if (User.Identity == null || !User.Identity.IsAuthenticated)

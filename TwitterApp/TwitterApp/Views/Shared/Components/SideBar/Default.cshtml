@@ -1,6 +1,24 @@
+@model User
 <ul class="list-group">
     <li class="list-group-item">Home</li>
     <li class="list-group-item">Explore</li>
     <li class="list-group-item">Notifications</li>
     <li class="list-group-item">Messages</li>
+    @if(User.Identity!.IsAuthenticated)
+    {
+        <li class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="/@Model.Username" class="d-flex align-items-center text-decoration-none flex-grow-1">
+                    <img src="~/img/@Model.Image" alt="@Model.Name" class="avatar me-2"/> 
+                    <div style="flex-grow: 1; min-width: 0;">
+                        <h6 class="card-title mb-0" style="font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">@Model.Name</h6>
+                        <span class="text-muted" style="font-size: 13px; white-space: nowrap;">@Model.Username</span>
+                    </div>
+                </a>
+                <a href="/users/logout" class="nav-link ms-3">
+                    <button class="btn btn-danger">Logout</button>
+                </a>
+            </div>
+        </li>
+    }
 </ul>
