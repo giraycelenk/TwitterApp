@@ -1,5 +1,5 @@
 body {
-    background-color: #f5f8fa;
+    background-color: #ffffff;
 }
 .login-container {
     max-width: 400px;
@@ -12,6 +12,10 @@ body {
 .twitter-logo {
     width: 50px;
     margin-bottom: 20px;
+}
+.twitter-logo-menu {
+    width: 50px;
+    
 }
 .form-control {
     margin-bottom: 15px;
@@ -38,6 +42,7 @@ body {
     border: 2px solid white; 
     margin-right: 10px; 
 }
+
 .cover-photo {
     height: 200px;
     background: url('~/img/twitteregg.jpg') no-repeat center center;
@@ -59,6 +64,7 @@ body {
     padding-top: 0; 
     padding-bottom: 0; 
     margin-top: 0;
+    max-width: 75%;   
 }
 .tweet-card {
     margin-bottom: 0;
@@ -79,4 +85,11 @@ body {
 .card-header{
     background-color: #ffffff; 
     border: none; 
+}
+.btn-follow-unfollow-custom {
+    border-radius: 25px;
+    padding: 6px 21px; 
+    font-size: 16px; 
+    background-color: black;
+    font-weight: bold;
 }

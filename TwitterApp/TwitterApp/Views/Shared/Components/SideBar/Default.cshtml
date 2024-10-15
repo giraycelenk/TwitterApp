@@ -1,9 +1,21 @@
 @model User
 <ul class="list-group">
+    <li class="list-group-item">
+        <a href="/" class="">
+            <img src="~/img/TwitterX.png" class="twitter-logo-menu"/> 
+        </a>
+    </li>
     <li class="list-group-item">Home</li>
     <li class="list-group-item">Explore</li>
     <li class="list-group-item">Notifications</li>
     <li class="list-group-item">Messages</li>
+    <li class="list-group-item">Grok</li>
+    <li class="list-group-item">Bookmarks</li>
+    <li class="list-group-item">Communities</li>
+    <li class="list-group-item">Premium</li>
+    <li class="list-group-item">Verified Orgs</li>
+    <li class="list-group-item">More</li>
+    <a href="/@Model.Username"><li class="list-group-item">Profile</li></a>
     @if(User.Identity!.IsAuthenticated)
     {
         <li class="list-group-item">
@@ -21,4 +33,5 @@
             </div>
         </li>
     }
+    
 </ul>
