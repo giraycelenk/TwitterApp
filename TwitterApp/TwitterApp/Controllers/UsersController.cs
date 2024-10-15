@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TwitterApp.Data.Abstract;
@@ -65,6 +66,7 @@ namespace TwitterApp.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
+        [Authorize]
         public async Task<IActionResult> Profile(string username)
         {
             if (User.Identity == null || !User.Identity.IsAuthenticated)
@@ -114,6 +116,7 @@ namespace TwitterApp.Controllers
             };
             return View(viewModel);      
         }
+        [Authorize]
         public async Task<IActionResult> Follow(int userIdToFollow)
         {
             var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -129,7 +132,7 @@ namespace TwitterApp.Controllers
             
             return Json(new { success = true, isFollowing = true, username = user.Username });
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Unfollow(int userIdToUnfollow)
         {

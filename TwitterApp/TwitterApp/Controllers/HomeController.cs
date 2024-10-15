@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TwitterApp.Data.Abstract;
@@ -17,7 +18,7 @@ public class HomeController : Controller
         _userRepository = userRepository;
         _tweetRepository = tweetRepository;
     }
-
+    [Authorize]
     public async Task<IActionResult> Index()
     {
         var claims = User.Claims;
@@ -30,6 +31,7 @@ public class HomeController : Controller
 
         return View(new TweetViewModel{Tweets = await tweets.OrderByDescending(t => t.TweetDate).ToListAsync()});
     }
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Index(TweetCreateModel tweet)
     {
