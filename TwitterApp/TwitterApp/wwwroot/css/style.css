@@ -42,6 +42,10 @@ body {
     border: 2px solid white; 
     margin-right: 10px; 
 }
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
 
 .cover-photo {
     height: 200px;
@@ -92,4 +96,44 @@ body {
     font-size: 16px; 
     background-color: black;
     font-weight: bold;
+}
+.tweet-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    margin-top: 10px;
+}
+
+.tweet-actions a {
+    text-decoration: none;
+    color: #6c757d; 
+    font-size: 18px;
+    border-radius: 50%;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tweet-actions a:hover {
+    color: #1d9bf0; 
+    background-color: rgba(29, 155, 240, 0.2); 
+    box-shadow: 0 0 10px rgba(29, 155, 240, 0.3);
+}
+
+.tweet-actions .retweet:hover {
+    color: #17bf63; 
+    background-color: rgba(23, 191, 99, 0.2); 
+    box-shadow: 0 0 10px rgba(23, 191, 99, 0.3);
+}
+
+.tweet-actions .like:hover {
+    color: #e0245e; 
+    background-color: rgba(224, 36, 94, 0.2); 
+    box-shadow: 0 0 10px rgba(224, 36, 94, 0.3);
+}
+
+.tweet-actions i {
+    padding: 0;
 }
