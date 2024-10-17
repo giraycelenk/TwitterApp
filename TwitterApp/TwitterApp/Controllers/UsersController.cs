@@ -132,6 +132,7 @@ namespace TwitterApp.Controllers
             return View(viewModel);      
         }
         [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Follow(int userIdToFollow)
         {
             var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -142,10 +143,8 @@ namespace TwitterApp.Controllers
                 return Json(new { success = false, message = "User not found." });
             }
 
-           
             bool isFollowing = await _userRepository.FollowUserAsync(currentUserId, userIdToFollow);
-            
-            return Json(new { success = true, isFollowing = true, username = user.Username });
+            return Json(new { success = true, isFollowing});
         }
         [Authorize]
         [HttpPost]
@@ -165,7 +164,7 @@ namespace TwitterApp.Controllers
                 var unfollowed = await _userRepository.UnfollowUserAsync(currentUserId, userIdToUnfollow);
                 var user = _userRepository.GetUserById(userIdToUnfollow); 
                 
-                return Json(new { success = true, isFollowing = false, username = user?.Username });
+                return Json(new { success = true, isFollowing = false});
             }
             catch (Exception ex)
             {

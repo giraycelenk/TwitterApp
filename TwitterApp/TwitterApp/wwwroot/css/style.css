@@ -1,6 +1,12 @@
 body {
     background-color: #ffffff;
 }
+
+#sidebar, #trends{
+    position: sticky;
+    top: 0;
+}
+
 .login-container {
     max-width: 400px;
     margin: 100px auto;
@@ -80,6 +86,12 @@ body {
 }
 .list-group-item {
     border: none; 
+    user-select: none;
+    cursor: pointer;
+}
+
+.list-group a{
+    text-decoration: none;
 }
 
 .list-group-item:hover {
@@ -124,22 +136,35 @@ body {
     box-sizing: border-box;
 }
 
+.tweet-actions div{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+}
+
+.tweet-actions div small{
+    font-size: 1em;
+}
+
+
+
 .tweet-actions a:hover {
     color: #1d9bf0; 
     background-color: rgba(29, 155, 240, 0.2); 
-    box-shadow: 0 0 10px rgba(29, 155, 240, 0.3);
+    box-shadow: 0 0 7px rgba(29, 155, 240, 0.3);
 }
 
 .tweet-actions .retweet:hover {
     color: #17bf63; 
     background-color: rgba(23, 191, 99, 0.2); 
-    box-shadow: 0 0 10px rgba(23, 191, 99, 0.3);
+    box-shadow: 0 0 7px rgba(23, 191, 99, 0.3);
 }
 
 .tweet-actions .like:hover {
     color: #e0245e; 
     background-color: rgba(224, 36, 94, 0.2); 
-    box-shadow: 0 0 10px rgba(224, 36, 94, 0.3);
+    box-shadow: 0 0 7px rgba(224, 36, 94, 0.3);
 }
 
 
@@ -147,19 +172,22 @@ body {
     display: flex;
     align-items: center;
 }
-.like i {
-    margin-right: -5px; 
-}
 
 .like-count {
     font-size: 13px; 
     color: #555; 
-    margin-left: 5px; 
     line-height: 1; 
     min-width: 20px;
     text-align: center; 
-    visibility: hidden; 
+    visibility: hidden;
+    cursor: default; 
+    position:absolute;
+    margin-left: 2.5em;
+    user-select: none;
 }
+
+
+
 .like-count.visible {
     visibility: visible; 
 }

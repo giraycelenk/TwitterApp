@@ -44,14 +44,16 @@
                         <a href="#" class="retweet">
                             <i class="fas fa-retweet"></i>
                         </a>
-                        <a href="#" class="like" data-tweet-id="@tweet.TweetId" 
-                            data-like-url="@Url.Action("LikeTweet", "Tweets")"
-                            data-unlike-url="@Url.Action("UnlikeTweet", "Tweets")">
-                            <i class="@(Model.IsLikedByCurrentUser[tweet.TweetId] ? "fas text-danger" : "far text-secondary") fa-heart"></i>
+                        <div>
+                            <a href="#" class="like" data-tweet-id="@tweet.TweetId" 
+                                data-like-url="@Url.Action("LikeTweet", "Tweets")"
+                                data-unlike-url="@Url.Action("UnlikeTweet", "Tweets")">
+                                <i class="@(Model.IsLikedByCurrentUser[tweet.TweetId] ? "fas text-danger" : "far text-secondary") fa-heart"></i>
+                            </a>
                             <small class="like-count @(tweet.Likes.Count() > 0 ? "visible" : "") @(Model.IsLikedByCurrentUser[tweet.TweetId] ? "text-danger" : "text-secondary")">
                                 @tweet.Likes.Count()
                             </small>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,4 +66,4 @@ else
 }
 
 
-<script src="~/js/tweet.js"></script>
+

@@ -5,7 +5,7 @@
         <div class="ml-3">
             <div class="cover-photo"></div>
             <div class="d-flex align-items-center">
-                <img src="~/img/twitteregg.jpg" alt="Profil Fotoğrafı" class="profile-photo">
+                <img src="~/img/@Model.User.Image" alt="Profil Fotoğrafı" class="profile-photo">
                 @if (User.Identity != null && User.Identity.IsAuthenticated && Model.User.UserId != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
                 {
                     <form method="post" asp-action="@(Model.IsFollowing ? "Unfollow" : "Follow")" asp-controller="Users" class="ms-auto">
@@ -93,4 +93,3 @@
         </div>
     </div>
 </div>
-<script src="~/js/follow.js"></script>

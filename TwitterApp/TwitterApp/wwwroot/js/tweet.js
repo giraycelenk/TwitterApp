@@ -25,15 +25,23 @@ $(document).ready(function() {
 
                     if (icon.hasClass('fas')) {
                         icon.addClass('text-danger').removeClass('text-secondary');
-                        $(that).find('.like-count').addClass('text-danger').removeClass('text-secondary');
+                        $(that).closest('div').find('.like-count').addClass('text-danger').removeClass('text-secondary');
                     } else {
                         icon.removeClass('text-danger').addClass('text-secondary');
-                        $(that).find('.like-count').removeClass('text-danger').addClass('text-secondary');
+                        $(that).closest('div').find('.like-count').removeClass('text-danger').addClass('text-secondary');
                     }
-                }
-                var likeCountElement = $(that).find('.like-count');
-                if (likeCountElement.length > 0 && response.likeCount >= 0) {
+                }         
+
+                var likeCountElement = $(that).closest('div').find('.like-count');
+                
+                if (likeCountElement.length > 0 && response.likeCount > 0) {
+                    likeCountElement.addClass("visible");
                     likeCountElement.text(response.likeCount);
+                }
+                else
+                {
+                    likeCountElement.removeClass("visible");
+                    likeCountElement.text("");
                 }
             },
             error: function() {
