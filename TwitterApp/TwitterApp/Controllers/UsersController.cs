@@ -13,9 +13,11 @@ namespace TwitterApp.Controllers
     public class UsersController:Controller
     {
         private readonly IUserRepository _userRepository;
-        public UsersController(IUserRepository userRepository)
+        private readonly ITweetRepository _tweetRepository;
+        public UsersController(IUserRepository userRepository,ITweetRepository tweetRepository)
         {
             _userRepository = userRepository;
+            _tweetRepository = tweetRepository;
         }
 
         public IActionResult Login()
@@ -115,12 +117,17 @@ namespace TwitterApp.Controllers
 
             var isFollowing = currentUser.Following.Any(f => f.FollowingUserId == user.UserId); 
 
-            var tweets = _userRepository.GetTweetsByUserId(user.UserId);
+            var tweets = _userRepository.GetTweetsByUserId(user.UserId).ToList();
+            var likesInfo = tweets.ToDictionary(
+                t => t.TweetId,
+                t => t.Likes.Any(l => l.UserId == currentUserId)
+            );
             var viewModel = new ProfileViewModel
             {
                 User = user,
                 Tweets = tweets,
-                IsFollowing = isFollowing
+                IsFollowing = isFollowing,
+                IsLikedByCurrentUser = likesInfo
             };
             return View(viewModel);      
         }

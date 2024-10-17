@@ -39,6 +39,7 @@ namespace TwitterApp.Data.Concrete.EfCore
         public List<Tweet> GetTweetsByUserId(int userId)
         {
             var tweets = _context.Tweets 
+                    .Include(t => t.Likes)
                     .Where(t => t.UserId == userId) 
                     .OrderByDescending(t => t.TweetDate) 
                     .ToList();

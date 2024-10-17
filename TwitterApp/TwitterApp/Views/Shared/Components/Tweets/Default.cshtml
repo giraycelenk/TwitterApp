@@ -1,52 +1,67 @@
 @model TweetViewModel
-@foreach(var tweet in Model.Tweets)
+@if (Model != null && Model.Tweets != null)
 {
-    <div class="card tweet-card">
-        <div class="card-body">
-            <div class="d-flex justify-content-start align-items-center">
-                <a href="/@tweet.User.Username"><img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/></a>
-                <div>
-                    <div class="d-flex align-items-center">
-                        <a href="/@tweet.User.Username"><h6 class="card-title mb-0 me-3">@tweet.User.Name</h6></a>
-                        <small>@tweet.User.Username · 
-                            @{
-                                DateTime tweetDate = @tweet.TweetDate;
-                                DateTime now = DateTime.Now;
-                                TimeSpan timeDifference = now - tweetDate;
-                                string timeAgo;
-                            
-                                if (timeDifference.TotalMinutes < 60) 
-                                {
-                                    timeAgo = $"{(int)timeDifference.TotalMinutes}m";
+    @foreach(var tweet in Model.Tweets)
+    {
+        <div class="card tweet-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-start align-items-center">
+                    <a href="/@tweet.User.Username"><img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/></a>
+                    <div>
+                        <div class="d-flex align-items-center">
+                            <a href="/@tweet.User.Username"><h6 class="card-title mb-0 me-3">@tweet.User.Name</h6></a>
+                            <small>@tweet.User.Username · 
+                                @{
+                                    DateTime tweetDate = @tweet.TweetDate;
+                                    DateTime now = DateTime.Now;
+                                    TimeSpan timeDifference = now - tweetDate;
+                                    string timeAgo;
+                                
+                                    if (timeDifference.TotalMinutes < 60) 
+                                    {
+                                        timeAgo = $"{(int)timeDifference.TotalMinutes}m";
+                                    }
+                                    else if (timeDifference.TotalHours < 24) 
+                                    {
+                                        timeAgo = $"{(int)timeDifference.TotalHours}h";
+                                    }
+                                    else 
+                                    {
+                                        timeAgo = $"{(int)timeDifference.TotalDays}d";
+                                    }
                                 }
-                                else if (timeDifference.TotalHours < 24) 
-                                {
-                                    timeAgo = $"{(int)timeDifference.TotalHours}h";
-                                }
-                                else 
-                                {
-                                    timeAgo = $"{(int)timeDifference.TotalDays}d";
-                                }
-                            }
-                            @timeAgo
-                        </small>
+                                @timeAgo
+                            </small>
+                        </div>
+                        <p class="card-text mt-2">@tweet.Content</p>
                     </div>
-                    <p class="card-text mt-2">@tweet.Content</p>
                 </div>
-            </div>
-            <div>
-                <div class="tweet-actions">  
-                    <a href="#" class="reply">
-                        <i class="far fa-comment"></i>
-                    </a>
-                    <a href="#" class="retweet">
-                        <i class="fas fa-retweet"></i>
-                    </a>
-                    <a href="#" class="like">
-                        <i class="far fa-heart"></i>
-                    </a>
+                <div>
+                    <div class="tweet-actions">  
+                        <a href="#" class="reply">
+                            <i class="far fa-comment"></i>
+                        </a>
+                        <a href="#" class="retweet">
+                            <i class="fas fa-retweet"></i>
+                        </a>
+                        <a href="#" class="like" data-tweet-id="@tweet.TweetId" 
+                            data-like-url="@Url.Action("LikeTweet", "Tweets")"
+                            data-unlike-url="@Url.Action("UnlikeTweet", "Tweets")">
+                            <i class="@(Model.IsLikedByCurrentUser[tweet.TweetId] ? "fas text-danger" : "far text-secondary") fa-heart"></i>
+                            <small class="like-count @(tweet.Likes.Count() > 0 ? "visible" : "") @(Model.IsLikedByCurrentUser[tweet.TweetId] ? "text-danger" : "text-secondary")">
+                                @tweet.Likes.Count()
+                            </small>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 }
+else
+{
+    <p>No tweets available.</p>
+}
+
+
+<script src="~/js/tweet.js"></script>

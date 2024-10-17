@@ -21,15 +21,7 @@ public class HomeController : Controller
     [Authorize]
     public async Task<IActionResult> Index()
     {
-        var claims = User.Claims;
-
-        var tweets = _tweetRepository
-                    .Tweets
-                    .Where(t => t.IsDeleted == false)
-                    .Include(t => t.User);
-
-
-        return View(new TweetViewModel{Tweets = await tweets.OrderByDescending(t => t.TweetDate).ToListAsync()});
+        return View();
     }
     [Authorize]
     [HttpPost]

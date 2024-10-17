@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -15,11 +16,19 @@ namespace TwitterApp.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var tweets = _tweetRepository
-                    .Tweets
-                    .Where(t => t.IsDeleted == false)
-                    .Include(t => t.User);
-            return View(new TweetViewModel{Tweets = await tweets.OrderByDescending(t => t.TweetDate).ToListAsync()});
+            var currentUserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var tweets = await _tweetRepository.GetAllTweetsAsync();
+
+            var likesInfo = tweets.ToDictionary(
+                t => t.TweetId,
+                t => t.Likes != null && t.Likes.Any(l => l.UserId == currentUserId)
+            );
+
+            return View(new TweetViewModel
+            {
+                Tweets = tweets,
+                IsLikedByCurrentUser = likesInfo
+            });
         }
     }
 }
