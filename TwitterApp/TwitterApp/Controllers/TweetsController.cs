@@ -27,15 +27,9 @@ namespace TwitterApp.Controllers
                 var likeExists = tweet.Likes.Any(l => l.UserId == userId);
                 if(!likeExists)
                 {
-                    var newLike = new Like { UserId = userId, TweetId = tweetId };
-                    tweet.Likes.Add(newLike);
-                    _tweetRepository.UpdateTweet(tweet);
+                    _tweetRepository.AddLike(tweetId,userId);
                     var updatedLikeCount = tweet.Likes.Count();
                     return Json(new { success = true,likeCount = updatedLikeCount});
-                }
-                else
-                {
-                    return Json(new { success = false});
                 }
             }
 
@@ -49,22 +43,51 @@ namespace TwitterApp.Controllers
                         .Tweets
                         .Include(t => t.Likes)
                         .FirstOrDefault(t => t.TweetId == tweetId);
-            if (tweet != null)
+
+            if(tweet != null && tweet.Likes.Any(l => l.UserId == userId))
             {
-                var like = tweet.Likes.FirstOrDefault(l => l.UserId == userId);
-                if(like != null)
-                {
-                    tweet.Likes.Remove(like);
-                    _tweetRepository.UpdateTweet(tweet);
-                    var updatedLikeCount = tweet.Likes.Count();
-                    return Json(new { success = true , likeCount = updatedLikeCount});
-                }
-                else
-                {
-                    return Json(new { success = false}); 
-                }
+                _tweetRepository.RemoveLike(tweetId,userId);
+                var updatedLikeCount = tweet.Likes.Count();
+                return Json(new { success = true , likeCount = updatedLikeCount});
             }
+            
             return Json(new { success = false}); 
+        }
+        [HttpPost]
+        public IActionResult Retweet(int tweetId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var tweet = _tweetRepository
+                        .Tweets
+                        .Include(t => t.Retweets)
+                        .FirstOrDefault(t => t.TweetId == tweetId);
+            
+            if (tweet != null && !tweet.Retweets.Any(r => r.UserId == userId))
+            {
+                _tweetRepository.AddRetweet(tweetId, userId);
+                var updatedRetweetCount = tweet.Retweets.Count();
+                return Json(new { success = true, retweetCount = updatedRetweetCount });
+            }
+
+            return Json(new { success = false});
+        }
+        [HttpPost]
+        public IActionResult UnRetweet(int tweetId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var tweet = _tweetRepository
+                        .Tweets
+                        .Include(t => t.Retweets)
+                        .FirstOrDefault(t => t.TweetId == tweetId);
+            
+            if (tweet != null && tweet.Retweets.Any(r => r.UserId == userId))
+            {
+                _tweetRepository.RemoveRetweet(tweetId, userId); 
+                var updatedRetweetCount = tweet.Retweets.Count();
+                return Json(new { success = true, reTweetCount = updatedRetweetCount });
+            }
+
+            return Json(new { success = false });
         }
     }
 }

@@ -9,6 +9,8 @@ namespace TwitterApp.Data.Abstract
         void CreateTweet(Tweet Tweet);
         void AddLike(int tweetId, int userId);
         void RemoveLike(int tweetId, int userId);
+        void AddRetweet(int tweetId, int userId);
+        void RemoveRetweet(int tweetId, int userId);
         void UpdateTweet(Tweet tweet);
         Task<List<Tweet>> GetAllTweetsAsync();
     }

@@ -48,6 +48,33 @@ namespace TwitterApp.Data.Concrete.EfCore
                 _context.SaveChanges(); 
             }
         }
+        public void AddRetweet(int tweetId, int userId)
+        {
+            var tweet = _context
+                        .Tweets
+                        .Include(t => t.Retweets) 
+                        .FirstOrDefault(t => t.TweetId == tweetId);
+            var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+
+            if (tweet != null && user != null)
+            {
+                var retweet = new Retweet { TweetId = tweetId, UserId = userId , RetweetDate = DateTime.Now};
+                tweet.Retweets.Add(retweet); 
+                _context.SaveChanges(); 
+            }
+        }
+
+        public void RemoveRetweet(int tweetId, int userId)
+        {
+            var retweet = _context
+                        .Retweets
+                        .FirstOrDefault(l => l.TweetId == tweetId && l.UserId == userId);
+            if (retweet != null)
+            {
+                _context.Retweets.Remove(retweet); 
+                _context.SaveChanges(); 
+            }
+        }
         public void UpdateTweet(Tweet tweet)
         {
             _context.Tweets.Update(tweet);
@@ -59,6 +86,7 @@ namespace TwitterApp.Data.Concrete.EfCore
             return _context.Tweets
                 .Include(t => t.User)
                 .Include(t => t.Likes) 
+                .Include(t => t.Retweets) 
                 .OrderByDescending(t => t.TweetDate) 
                 .ToListAsync();
         }

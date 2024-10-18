@@ -23,11 +23,16 @@ namespace TwitterApp.ViewComponents
                 t => t.TweetId,
                 t => t.Likes != null && t.Likes.Any(l => l.UserId == currentUserId)
             );
+            var retweetsInfo = tweets.ToDictionary(
+                t => t.TweetId,
+                t => t.Retweets != null && t.Retweets.Any(l => l.UserId == currentUserId)
+            );
 
             return View(new TweetViewModel
             {
                 Tweets = tweets,
-                IsLikedByCurrentUser = likesInfo
+                IsLikedByCurrentUser = likesInfo,
+                IsRetweetedByCurrentUser = retweetsInfo
             });
         }
     }

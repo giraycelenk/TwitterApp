@@ -122,12 +122,18 @@ namespace TwitterApp.Controllers
                 t => t.TweetId,
                 t => t.Likes.Any(l => l.UserId == currentUserId)
             );
+            var retweetsInfo = tweets.ToDictionary(
+                t => t.TweetId,
+                t => t.Retweets != null && t.Retweets.Any(l => l.UserId == currentUserId)
+            );
+
             var viewModel = new ProfileViewModel
             {
                 User = user,
                 Tweets = tweets,
                 IsFollowing = isFollowing,
-                IsLikedByCurrentUser = likesInfo
+                IsLikedByCurrentUser = likesInfo,
+                IsRetweetedByCurrentUser = retweetsInfo
             };
             return View(viewModel);      
         }
