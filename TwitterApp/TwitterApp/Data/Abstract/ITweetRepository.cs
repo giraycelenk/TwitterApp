@@ -1,4 +1,5 @@
 using TwitterApp.Entity;
+using TwitterApp.Models;
 
 namespace TwitterApp.Data.Abstract
 {
@@ -13,5 +14,6 @@ namespace TwitterApp.Data.Abstract
         void RemoveRetweet(int tweetId, int userId);
         void UpdateTweet(Tweet tweet);
         Task<List<Tweet>> GetAllTweetsAsync();
+        Task<TweetViewModel> GetTweetActivityByUserIdAsync(int userId);
     }
 }

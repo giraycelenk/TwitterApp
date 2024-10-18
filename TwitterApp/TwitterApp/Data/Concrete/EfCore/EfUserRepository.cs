@@ -116,5 +116,26 @@ namespace TwitterApp.Data.Concrete.EfCore
             return await _context.UserFollows
                                 .FirstOrDefaultAsync(f => f.FollowerUserId == followerUserId && f.FollowingUserId == followingUserId);
         }
+
+        public async Task<ProfileViewModel> GetProfileByUserNameAsync(int userId,string username)
+        {
+
+            var currentUser = await _context.Users
+                                    .Include(u => u.Followers)
+                                    .Include(u => u.Following)
+                                    .FirstOrDefaultAsync(x => x.UserId == userId);
+            var user = await _context.Users
+                                    .Include(u => u.Followers)
+                                    .Include(u => u.Following)
+                                    .FirstOrDefaultAsync(x => x.Username == username);
+            var isFollowing = currentUser.Following.Any(f => f.FollowingUserId == user.UserId); 
+            return new ProfileViewModel
+            {
+                User = user,
+                IsFollowing = isFollowing,
+            };
+        }
+
+        
     }
 }

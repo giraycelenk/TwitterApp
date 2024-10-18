@@ -82,7 +82,10 @@ body {
 .trends {
     margin-left: 15px; 
     border-radius: 25px; 
-    overflow: hidden; 
+}
+.trends-card {
+    border-radius: 20px;
+    overflow: hidden;
 }
 .list-group-item {
     border: none; 
@@ -108,6 +111,7 @@ body {
     font-size: 16px; 
     background-color: black;
     font-weight: bold;
+    margin-right: 1em;
 }
 .tweet-actions {
     display: flex;

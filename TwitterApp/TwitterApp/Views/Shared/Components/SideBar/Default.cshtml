@@ -24,7 +24,7 @@
                     <img src="~/img/@Model.Image" alt="@Model.Name" class="avatar me-2"/> 
                     <div style="flex-grow: 1; min-width: 0;">
                         <h6 class="card-title mb-0" style="font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">@Model.Name</h6>
-                        <span class="text-muted" style="font-size: 13px; white-space: nowrap;">@Model.Username</span>
+                        <span class="text-muted" style="font-size: 13px; white-space: nowrap;">@($"@{Model.Username}")</span>
                     </div>
                 </a>
                 <a href="/users/logout" class="nav-link ms-3">

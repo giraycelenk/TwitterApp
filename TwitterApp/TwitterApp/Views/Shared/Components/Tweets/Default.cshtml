@@ -6,11 +6,13 @@
         <div class="card tweet-card">
             <div class="card-body">
                 <div class="d-flex justify-content-start align-items-center">
-                    <a href="/@tweet.User.Username"><img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/></a>
+                    <a href="/@tweet.User.Username">
+                        <img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/>
+                    </a>
                     <div>
                         <div class="d-flex align-items-center">
-                            <a href="/@tweet.User.Username"><h6 class="card-title mb-0 me-3">@tweet.User.Name</h6></a>
-                            <small>@tweet.User.Username · 
+                            <a href="/@tweet.User.Username"><h6 class="card-title mb-0 me-1">@tweet.User.Name</h6></a>
+                            <small>@($"@{tweet.User.Username}") · 
                                 @{
                                     DateTime tweetDate = @tweet.TweetDate;
                                     DateTime now = DateTime.Now;

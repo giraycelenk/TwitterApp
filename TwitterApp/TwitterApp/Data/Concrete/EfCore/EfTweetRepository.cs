@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TwitterApp.Data.Abstract;
 using TwitterApp.Entity;
+using TwitterApp.Models;
 
 namespace TwitterApp.Data.Concrete.EfCore
 {
@@ -91,6 +92,25 @@ namespace TwitterApp.Data.Concrete.EfCore
                 .ToListAsync();
         }
 
-        
+        public async Task<TweetViewModel> GetTweetActivityByUserIdAsync(int userId)
+        {
+            var tweets = await GetAllTweetsAsync();
+
+            var likesInfo = tweets.ToDictionary(
+                t => t.TweetId,
+                t => t.Likes != null && t.Likes.Any(l => l.UserId == userId)
+            );
+            var retweetsInfo = tweets.ToDictionary(
+                t => t.TweetId,
+                t => t.Retweets != null && t.Retweets.Any(l => l.UserId == userId)
+            );
+
+            return new TweetViewModel
+            {
+                Tweets = tweets,
+                IsLikedByCurrentUser = likesInfo,
+                IsRetweetedByCurrentUser = retweetsInfo
+            };
+        }
     }
 }
