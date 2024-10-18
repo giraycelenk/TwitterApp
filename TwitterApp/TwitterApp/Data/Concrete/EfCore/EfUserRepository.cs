@@ -40,6 +40,7 @@ namespace TwitterApp.Data.Concrete.EfCore
         {
             var tweets = _context.Tweets 
                     .Include(t => t.Likes)
+                    .Include(t => t.Retweets)
                     .Where(t => t.UserId == userId) 
                     .OrderByDescending(t => t.TweetDate) 
                     .ToList();

@@ -75,17 +75,26 @@
                             <a href="#" class="reply">
                                 <i class="far fa-comment"></i>
                             </a>
-                            <a href="#" class="retweet">
-                                <i class="fas fa-retweet"></i>
-                            </a>
-                            <a href="#" class="like" data-tweet-id="@tweet.TweetId" 
-                                data-like-url="@Url.Action("LikeTweet", "Tweets")"
-                                data-unlike-url="@Url.Action("UnlikeTweet", "Tweets")">
-                                <i class="@(Model.IsLikedByCurrentUser[tweet.TweetId] ? "fas text-danger" : "far text-secondary") fa-heart"></i>
+                            <div>
+                                <a href="#" class="retweet" data-tweet-id="@tweet.TweetId" 
+                                    data-retweet-url="@Url.Action("Retweet", "Tweets")"
+                                    data-unretweet-url="@Url.Action("UnRetweet", "Tweets")">
+                                    <i class="fa fa-retweet @(Model.IsRetweetedByCurrentUser[tweet.TweetId] ? "text-success" : "text-secondary")"></i>
+                                </a>
+                                <small class="retweet-count @(tweet.Retweets.Count() > 0 ? "visible" : "") @(Model.IsRetweetedByCurrentUser[tweet.TweetId] ? "text-success" : "text-secondary")">
+                                    @tweet.Retweets.Count()
+                                </small>
+                            </div>              
+                            <div>
+                                <a href="#" class="like" data-tweet-id="@tweet.TweetId" 
+                                    data-like-url="@Url.Action("LikeTweet", "Tweets")"
+                                    data-unlike-url="@Url.Action("UnlikeTweet", "Tweets")">
+                                    <i class="@(Model.IsLikedByCurrentUser[tweet.TweetId] ? "fas text-danger" : "far text-secondary") fa-heart"></i>
+                                </a>
                                 <small class="like-count @(tweet.Likes.Count() > 0 ? "visible" : "") @(Model.IsLikedByCurrentUser[tweet.TweetId] ? "text-danger" : "text-secondary")">
                                     @tweet.Likes.Count()
                                 </small>
-                            </a>
+                            </div>
                         </div>
                     </div>
                 </div>
