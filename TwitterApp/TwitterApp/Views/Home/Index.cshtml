@@ -1,4 +1,4 @@
-﻿<form action="/Home/CreateTweet" method="post">
+﻿<form class="tweet-form" asp-controller="Home" asp-action="CreateTweet" method="post" >
     <div class="card">
         <div class="card-body">
             <textarea class="form-control" name="Content" placeholder="What's happening?" rows="3" maxlength="280" oninput="updateCharCount(this)" ></textarea>

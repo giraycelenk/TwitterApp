@@ -8,7 +8,7 @@
                 <img src="~/img/@Model.User.Image" alt="Profil Fotoğrafı" class="profile-photo">
                 @if (User.Identity != null && User.Identity.IsAuthenticated && Model.User.UserId != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
                 {
-                    <form method="post" asp-action="@(Model.IsFollowing ? "Unfollow" : "Follow")" asp-controller="Users" class="ms-auto">
+                    <form method="post" asp-action="@(Model.IsFollowing ? "Unfollow" : "Follow")" asp-controller="Users" class="ms-auto follow-form">
                         <input type="hidden" name="@(Model.IsFollowing ? "userIdToUnfollow" : "userIdToFollow")" value="@Model.User.UserId"/>
                         <button type="submit" class="btn @(Model.IsFollowing ? "btn-danger" : "btn-primary") btn-follow-unfollow-custom">
                             @(Model.IsFollowing ? "Unfollow" : "Follow")
@@ -93,3 +93,4 @@
         </div>
     </div>
 </div>
+

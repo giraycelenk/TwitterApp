@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('form').on('submit', function (event) {
+    $('form.follow-form').on('submit', function (event) {
         event.preventDefault(); 
 
         var form = $(this);
@@ -36,7 +36,7 @@ $(document).ready(function () {
                     }
                 } else {
                     
-                    alert(response.message);
+                    alert("follow "+ response.mn);
                 }
             },
             error: function () {
