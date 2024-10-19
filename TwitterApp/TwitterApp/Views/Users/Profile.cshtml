@@ -17,7 +17,14 @@
         </div>
         <div class="bio">
             <h3>@Model.User.Name</h3>
-            <span class="text-muted">@($"@{Model.User.Username}")</span>
+            <div>
+                <span class="text-muted">@($"@{Model.User.Username}")</span>
+                @if(Model.IsFollower)
+                {
+                    <span class="follows-you-box text-muted">Follows you</span>
+                }
+            </div>
+            
             <p>@Model.User.Bio</p>
             @if (!string.IsNullOrEmpty(Model.User.Location))
             {
@@ -36,9 +43,9 @@
             
         </div>
         <div class="mt-3">
-            <strong class="followers-count">@Model.User.Followers.Count() Followers</strong> 
-            <strong>@Model.User.Following.Count() Following</strong>
-            <strong>@Model.User.Tweets.Count() Tweet</strong>
+            <strong>@Model.User.Following.Count() <small class="profile-statistics">Following</small></strong>
+            <strong class="followers-count">@Model.User.Followers.Count() <small class="profile-statistics">Followers</small></strong> 
+            <strong>@Model.User.Tweets.Count() <small class="profile-statistics">Tweet</small></strong>
         </div>
     </div>
     <div class="mt-4">

@@ -79,6 +79,7 @@ body {
 .tweet-card {
     margin-bottom: 0;
 }
+
 .trends {
     margin-left: 15px; 
     border-radius: 25px; 
@@ -233,4 +234,16 @@ body {
 
 .tweet-username-link:hover {
     color: black;
+}
+.follows-you-box {
+    background-color: #f0f0f0; 
+    color: #6c757d; 
+    padding: 0px 3px; 
+    border-radius: 4px; 
+    font-size: 0.70rem;
+    font-weight: 500;
+    display: inline-block; 
+}
+.profile-statistics{
+    font-size: 14px;
 }

@@ -138,10 +138,12 @@ namespace TwitterApp.Data.Concrete.EfCore
                                     .Include(u => u.Following)
                                     .FirstOrDefaultAsync(x => x.Username == username);
             var isFollowing = currentUser.Following.Any(f => f.FollowingUserId == user.UserId); 
+            var isFollower = currentUser.Followers.Any(f => f.FollowerUserId == user.UserId); 
             return new ProfileViewModel
             {
                 User = user,
                 IsFollowing = isFollowing,
+                IsFollower = isFollower
             };
         }
 
