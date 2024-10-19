@@ -10,8 +10,25 @@
                         <img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/>
                     </a>
                     <div>
+                        @if(Model.FollowedRetweetsUsers.ContainsKey(tweet.TweetId))
+                        {
+                            <small class="mb-2">
+                                <i class="fa fa-retweet text-secondary"></i> 
+                                @{
+                                    var linkText = Model.IsProfilePage 
+                                        ? (Model.PageUser.UserId == Model.User.UserId ? "You reposted" : $"{Model.FollowedRetweetsUsers[tweet.TweetId].Name} reposted")
+                                        : (Model.FollowedRetweetsUsers.ContainsKey(tweet.TweetId) && Model.FollowedRetweetsUsers[tweet.TweetId].Name == Model.User.Name 
+                                            ? "You reposted" 
+                                            : $"{Model.FollowedRetweetsUsers[tweet.TweetId].Name} reposted");
+                                    
+                                    var username = Model.FollowedRetweetsUsers.ContainsKey(tweet.TweetId) ? Model.FollowedRetweetsUsers[tweet.TweetId].Username : Model.User.Username;
+                                }
+                                <a href="/@username" class="gray-link">@linkText</a>
+                            </small> 
+                            
+                        }
                         <div class="d-flex align-items-center">
-                            <a href="/@tweet.User.Username"><h6 class="card-title mb-0 me-1">@tweet.User.Name</h6></a>
+                            <a href="/@tweet.User.Username" class="tweet-username-link"><h6 class="card-title mb-0 me-1" >@tweet.User.Name</h6></a>
                             <small>@($"@{tweet.User.Username}") · 
                                 @{
                                     DateTime tweetDate = @tweet.TweetDate;
@@ -34,6 +51,7 @@
                                 }
                                 @timeAgo
                             </small>
+                            
                         </div>
                         <p class="card-text mt-2">@tweet.Content</p>
                     </div>

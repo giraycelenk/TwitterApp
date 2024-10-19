@@ -217,3 +217,20 @@ body {
 .retweet-count.visible {
     visibility: visible; 
 }
+
+.gray-link {
+    color: #6c757d;
+    text-decoration: none; 
+}
+
+.gray-link:hover {
+    color: #6c757d; 
+}
+
+.tweet-username-link {
+    color: black;
+}
+
+.tweet-username-link:hover {
+    color: black;
+}

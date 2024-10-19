@@ -84,7 +84,7 @@ namespace TwitterApp.Controllers
             {
                 _tweetRepository.RemoveRetweet(tweetId, userId); 
                 var updatedRetweetCount = tweet.Retweets.Count();
-                return Json(new { success = true, reTweetCount = updatedRetweetCount });
+                return Json(new { success = true, retweetCount = updatedRetweetCount });
             }
 
             return Json(new { success = false });

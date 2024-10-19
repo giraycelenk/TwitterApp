@@ -47,6 +47,7 @@ namespace TwitterApp.Data.Concrete.EfCore
             
             return tweets ?? new List<Tweet>(); 
         }
+        
 
         public List<User> GetFollowers(int userId)
         {
@@ -121,10 +122,18 @@ namespace TwitterApp.Data.Concrete.EfCore
         {
 
             var currentUser = await _context.Users
+                                    .Include(u => u.Tweets)
+                                    .Include(u => u.Likes)
+                                    .Include(u => u.Retweets)
+                                    .Include(u => u.Mentions)
                                     .Include(u => u.Followers)
                                     .Include(u => u.Following)
                                     .FirstOrDefaultAsync(x => x.UserId == userId);
             var user = await _context.Users
+                                    .Include(u => u.Tweets)
+                                    .Include(u => u.Likes)
+                                    .Include(u => u.Retweets)
+                                    .Include(u => u.Mentions)
                                     .Include(u => u.Followers)
                                     .Include(u => u.Following)
                                     .FirstOrDefaultAsync(x => x.Username == username);

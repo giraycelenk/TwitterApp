@@ -14,6 +14,15 @@ namespace TwitterApp.Data.Abstract
         void RemoveRetweet(int tweetId, int userId);
         void UpdateTweet(Tweet tweet);
         Task<List<Tweet>> GetAllTweetsAsync();
-        Task<TweetViewModel> GetTweetActivityByUserIdAsync(int userId);
+        Task<List<Tweet>> GetAllTweetsAndRetweetsByUserIdAsync(int userId,bool isProfilePage);
+        Task<List<Tweet>> GetUserTweetsByUserIdAsync(int userId);
+        Task<List<Tweet>> GetUserRetweetsByUserIdAsync(int userId);
+        Task<List<Tweet>> GetFollowedTweetsByUserIdAsync(int userId);
+        Task<List<Tweet>> GetFollowedRetweetsByUserIdAsync(int userId);
+        Task<List<Retweet>> GetUserAndFollowedRetweetsForDictionaryAsync(int userId);
+        Task<Dictionary<int,User>> GetFollowedRetweetsDictionaryAsync(int userId);
+        Task<TweetViewModel> GetTweetsAndActivitiesByUserIdAsync(int currentUserId,int userId,User currentUser,User pageUser,bool isProfilePage);
+        
+        int ProfilePageAndIdControl(int currentUserId,int userId,bool isProfilePage);
     }
 }

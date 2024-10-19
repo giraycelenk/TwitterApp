@@ -19,43 +19,15 @@ namespace TwitterApp.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync(bool IsProfilePage = false,string username="")
         {
-            var currentUserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            if(IsProfilePage == true && !string.IsNullOrEmpty(username))
-            {
-                var user = await _userRepository.Users
-                                    .Include(u => u.Followers)
-                                    .Include(u => u.Following)
-                                    .FirstOrDefaultAsync(x => x.Username == username);
-                
-                var currentUser = await _userRepository.Users
-                                        .Include(u => u.Followers)
-                                        .Include(u => u.Following)
-                                        .FirstOrDefaultAsync(x => x.UserId == currentUserId);
+            int currentUserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var user = _userRepository.GetUserById(currentUserId);
+            int pageuserId = _userRepository.GetIdByUsername(username);
+            var pageUser = _userRepository.GetUserById(pageuserId);
 
-                var tweets = _userRepository.GetTweetsByUserId(user.UserId).ToList();
-                var likesInfo = tweets.ToDictionary(
-                    t => t.TweetId,
-                    t => t.Likes.Any(l => l.UserId == currentUserId)
-                );
-                var retweetsInfo = tweets.ToDictionary(
-                    t => t.TweetId,
-                    t => t.Retweets != null && t.Retweets.Any(l => l.UserId == currentUserId)
-                );
-
-                var viewModel = new TweetViewModel
-                {
-                    Tweets = tweets,
-                    IsLikedByCurrentUser = likesInfo,
-                    IsRetweetedByCurrentUser = retweetsInfo
-                };
-                return View(viewModel);
-            }
-            else
-            {
-                TweetViewModel tweetViewModel = await _tweetRepository.GetTweetActivityByUserIdAsync(currentUserId);
-                var tweets = await _tweetRepository.GetAllTweetsAsync();
-                return View(tweetViewModel);
-            }
+            TweetViewModel viewModel = await _tweetRepository.GetTweetsAndActivitiesByUserIdAsync(currentUserId,pageuserId,user,pageUser,IsProfilePage);
+            
+            return View(viewModel);
+            
             
         }
     }
