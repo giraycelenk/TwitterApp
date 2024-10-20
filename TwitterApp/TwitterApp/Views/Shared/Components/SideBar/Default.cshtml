@@ -5,17 +5,17 @@
             <img src="~/img/TwitterX.png" class="twitter-logo-menu"/> 
         </a>
     </li>
-    <a href="/" class=""><li class="list-group-item">Home</li></a>
-    <li class="list-group-item"><span>Explore</span></li>
-    <li class="list-group-item"><span>Notifications</span></li>
-    <li class="list-group-item"><span>Messages</span></li>
-    <li class="list-group-item"><span>Grok</span></li>
-    <li class="list-group-item"><span>Bookmarks</span></li>
-    <li class="list-group-item"><span>Communities</span></li>
-    <li class="list-group-item"><span>Premium</span></li>
-    <li class="list-group-item"><span>Verified</span> Orgs</li>
-    <li class="list-group-item"><span>More</span></li>
-    <a href="/@Model.Username"><li class="list-group-item">Profile</li></a>
+    <a href="/" class=""><li class="list-group-item"><i class="fas fa-home"></i> Home</li></a>
+    <li class="list-group-item"><i class="fa-solid fa-magnifying-glass"></i><span>Explore</span></li>
+    <li class="list-group-item"><i class="far fa-bell"></i><span>Notifications</span></li>
+    <li class="list-group-item"><i class="far fa-envelope"></i><span>Messages</span></li>
+    <li class="list-group-item"><i class="far fa-lightbulb"></i><span>Grok</span></li>
+    <li class="list-group-item"><i class="far fa-bookmark"></i><span>Bookmarks</span></li>
+    <li class="list-group-item"><i class="fas fa-users"></i><span>Communities</span></li>
+    <li class="list-group-item"><img src="~/img/TwitterX.png" class="twitter-logo-menu"/> <span>Premium</span></li>
+    <li class="list-group-item"><i class="fa-solid fa-bolt"></i><span>Verified</span> Orgs</li>
+    <li class="list-group-item"><i class="fas fa-ellipsis-h"></i><span>More</span></li>
+    <a href="/@Model.Username"><li class="list-group-item"><i class="far fa-user"></i> Profile</li></a>
     @if(User.Identity!.IsAuthenticated)
     {
         <li class="list-group-item">

@@ -21,7 +21,7 @@ body {
 }
 .twitter-logo-menu {
     width: 50px;
-    
+    margin-left: -12px;
 }
 .form-control {
     margin-bottom: 15px;
@@ -92,6 +92,11 @@ body {
     border: none; 
     user-select: none;
     cursor: pointer;
+}
+.list-group-item i {
+    margin-right: 8px; 
+    color: black; 
+    font-size: 25px; 
 }
 
 .list-group a{
@@ -208,8 +213,6 @@ body {
     margin-left: 2.2em;
     user-select: none;
 }
-
-
 
 .like-count.visible {
     visibility: visible; 
