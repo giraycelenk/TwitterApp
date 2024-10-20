@@ -31,7 +31,7 @@
                             <a href="/@tweet.User.Username" class="tweet-username-link"><h6 class="card-title mb-0 me-1" >@tweet.User.Name</h6></a>
                             <small>@($"@{tweet.User.Username}") · 
                                 @{
-                                    DateTime tweetDate = @tweet.TweetDate;
+                                    DateTime tweetDate = @Model.TweetsDates[tweet.TweetId];
                                     DateTime now = DateTime.Now;
                                     TimeSpan timeDifference = now - tweetDate;
                                     string timeAgo;
@@ -48,10 +48,13 @@
                                     {
                                         timeAgo = $"{(int)timeDifference.TotalDays}d";
                                     }
+                                    string fullDate = tweetDate.ToString("h:mm tt · MMM d, yyyy");
                                 }
-                                @timeAgo
+                                <span class="time-ago-container">
+                                    @timeAgo
+                                    <span class="tooltip">@fullDate</span>
+                                </span>
                             </small>
-                            
                         </div>
                         <p class="card-text mt-2">@tweet.Content</p>
                     </div>

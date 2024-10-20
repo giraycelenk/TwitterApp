@@ -127,16 +127,22 @@ namespace TwitterApp.Data.Concrete.EfCore
             var viewModel = new TweetViewModel
             {
                 Tweets = new List<Tweet>(),
+                TweetsDates = new Dictionary<int,DateTime>(),
                 IsProfilePage = isProfilePage,
                 User = currentUser,
                 PageUser = pageUser,
                 IsLikedByCurrentUser = new Dictionary<int, bool>(),
                 IsRetweetedByCurrentUser = new Dictionary<int, bool>()
             };
-            
+            Dictionary<int,DateTime> tweetsDates = new Dictionary<int,DateTime>();
             var tweets = await GetAllTweetsAndRetweetsByUserIdAsync(ProfilePageAndIdControl(currentUserId,userId,isProfilePage),isProfilePage);
-
+            foreach(var tweet in tweets)
+            {
+                DateTime actualTweetDate = _context.Tweets.Where(t => t.TweetId == tweet.TweetId).Select(t => t.TweetDate).FirstOrDefault();
+                tweetsDates[tweet.TweetId] = actualTweetDate;
+            }
             viewModel.Tweets.AddRange(tweets);
+            viewModel.TweetsDates = tweetsDates;
             viewModel.IsLikedByCurrentUser = tweets.ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
             viewModel.IsRetweetedByCurrentUser = tweets.ToDictionary(t => t.TweetId, t => t.Retweets.Any(r => r.UserId == currentUserId));
             viewModel.FollowedRetweetsUsers = await GetFollowedRetweetsDictionaryAsync(ProfilePageAndIdControl(currentUserId,userId,isProfilePage));
