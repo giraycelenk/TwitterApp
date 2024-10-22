@@ -18,21 +18,25 @@ $(document).ready(function () {
                     if (response.isFollowing) {
                         
                         followButton.text('Unfollow');
+                        followButton.addClass('btn-danger');
+                        followButton.removeClass('btn-primary');
                         form.attr('action', '/Users/Unfollow'); 
                         hiddenInput.attr('name', 'userIdToUnfollow'); 
 
                         
                         let followersCount = parseInt($('.followers-count').text());
-                        $('.followers-count').text(followersCount + 1 + " Followers");
+                        $('.followers-count').text(followersCount + 1 + " ");
                     } else {
                         
                         followButton.text('Follow');
+                        followButton.addClass('btn-primary');
+                        followButton.removeClass('btn-danger');
                         form.attr('action', '/Users/Follow'); 
                         hiddenInput.attr('name', 'userIdToFollow'); 
 
                         
                         let followersCount = parseInt($('.followers-count').text());
-                        $('.followers-count').text(followersCount - 1 + " Followers");
+                        $('.followers-count').text(followersCount - 1 + " ");
                     }
                 } else {
                     

@@ -24,11 +24,11 @@ $(document).ready(function() {
                     icon.toggleClass('fas far'); 
 
                     if (icon.hasClass('fas')) {
-                        icon.addClass('text-danger').removeClass('text-secondary');
-                        $(that).closest('div').find('.like-count').addClass('text-danger').removeClass('text-secondary');
+                        icon.addClass('text-danger');
+                        $(that).closest('div').find('.like-count').addClass('text-danger');
                     } else {
-                        icon.removeClass('text-danger').addClass('text-secondary');
-                        $(that).closest('div').find('.like-count').removeClass('text-danger').addClass('text-secondary');
+                        icon.removeClass('text-danger');
+                        $(that).closest('div').find('.like-count').removeClass('text-danger');
                     }
                 }         
 
@@ -69,11 +69,11 @@ $(document).ready(function() {
                     var icon = $(that).find('i');
 
                     if (icon.hasClass('text-success')) {
-                        icon.removeClass('text-success').addClass('text-secondary');
-                        $(that).closest('div').find('.retweet-count').removeClass('text-success').addClass('text-secondary');
+                        icon.removeClass('text-success');
+                        $(that).closest('div').find('.retweet-count').removeClass('text-success');
                     } else {
-                        icon.removeClass('text-secondary').addClass('text-success');
-                        $(that).closest('div').find('.retweet-count').removeClass('text-secondary').addClass('text-success');
+                        icon.addClass('text-success');
+                        $(that).closest('div').find('.retweet-count').addClass('text-success');
                     }
                 }
 

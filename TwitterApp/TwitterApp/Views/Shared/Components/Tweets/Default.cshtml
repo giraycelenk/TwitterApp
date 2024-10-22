@@ -28,8 +28,8 @@
                             
                         }
                         <div class="d-flex align-items-center">
-                            <a href="/@tweet.User.Username" class="tweet-username-link"><h6 class="card-title mb-0 me-1" >@tweet.User.Name</h6></a>
-                            <small>@($"@{tweet.User.Username}") · 
+                            <a href="/@tweet.User.Username" class="tweet-user-name-link"><h6 class="card-title mb-0 me-1" >@tweet.User.Name</h6></a>
+                            <small><a href="/@tweet.User.Username" class="tweet-username-link">@($"@{tweet.User.Username}") </a>· 
                                 @{
                                     DateTime tweetDate = @Model.TweetsDates[tweet.TweetId];
                                     DateTime now = DateTime.Now;
@@ -51,7 +51,9 @@
                                     string fullDate = tweetDate.ToString("h:mm tt · MMM d, yyyy");
                                 }
                                 <span class="time-ago-container">
-                                    @timeAgo
+                                    <a href="@Url.Action("TweetDetails", "Tweets", new { username = @tweet.User.Username, tweetid = @tweet.TweetId })" class="tweet-details-link">
+                                        @timeAgo
+                                    </a>
                                     <span class="tooltip">@fullDate</span>
                                 </span>
                             </small>
@@ -68,9 +70,9 @@
                             <a href="#" class="retweet" data-tweet-id="@tweet.TweetId" 
                                 data-retweet-url="@Url.Action("Retweet", "Tweets")"
                                 data-unretweet-url="@Url.Action("UnRetweet", "Tweets")">
-                                <i class="fa fa-retweet @(Model.IsRetweetedByCurrentUser[tweet.TweetId] ? "text-success" : "text-secondary")"></i>
+                                <i class="fa fa-retweet @(Model.IsRetweetedByCurrentUser[tweet.TweetId] ? "text-success" : "")"></i>
                             </a>
-                            <small class="retweet-count @(tweet.Retweets.Count() > 0 ? "visible" : "") @(Model.IsRetweetedByCurrentUser[tweet.TweetId] ? "text-success" : "text-secondary")">
+                            <small class="retweet-count @(tweet.Retweets.Count() > 0 ? "visible" : "") @(Model.IsRetweetedByCurrentUser[tweet.TweetId] ? "text-success" : "")">
                                 @tweet.Retweets.Count()
                             </small>
                         </div>              
@@ -78,9 +80,9 @@
                             <a href="#" class="like" data-tweet-id="@tweet.TweetId" 
                                 data-like-url="@Url.Action("LikeTweet", "Tweets")"
                                 data-unlike-url="@Url.Action("UnlikeTweet", "Tweets")">
-                                <i class="@(Model.IsLikedByCurrentUser[tweet.TweetId] ? "fas text-danger" : "far text-secondary") fa-heart"></i>
+                                <i class="@(Model.IsLikedByCurrentUser[tweet.TweetId] ? "fas text-danger" : "far") fa-heart"></i>
                             </a>
-                            <small class="like-count @(tweet.Likes.Count() > 0 ? "visible" : "") @(Model.IsLikedByCurrentUser[tweet.TweetId] ? "text-danger" : "text-secondary")">
+                            <small class="like-count @(tweet.Likes.Count() > 0 ? "visible" : "") @(Model.IsLikedByCurrentUser[tweet.TweetId] ? "text-danger" : "")">
                                 @tweet.Likes.Count()
                             </small>
                         </div>

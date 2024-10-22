@@ -7,6 +7,17 @@ body {
     top: 0;
 }
 
+#sidebar .list-group-item > i,
+#sidebar .list-group-item > img{
+    width: 25px;
+    max-width: 25px;
+    min-width: 25px;
+}
+
+#sidebar .list-group-item > img{
+    margin-right: 10px;
+}
+
 .login-container {
     max-width: 400px;
     margin: 100px auto;
@@ -39,6 +50,9 @@ body {
 }
 .custom-tweet-btn {
     border-radius: 20px; 
+    padding: 6px 18px; 
+    font-size: 16px; 
+    font-weight: bold;
 }
 .avatar {
     width: 40px;
@@ -94,7 +108,7 @@ body {
     cursor: pointer;
 }
 .list-group-item i {
-    margin-right: 8px; 
+    margin-right: 15px; 
     color: black; 
     font-size: 25px; 
 }
@@ -231,13 +245,24 @@ body {
     color: #6c757d; 
 }
 
-.tweet-username-link {
+.tweet-user-name-link {
     color: black;
 }
 
-.tweet-username-link:hover {
+.tweet-user-name-link:hover {
     color: black;
 }
+
+.tweet-username-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.tweet-username-link:hover {
+    color: inherit; 
+    text-decoration: none; 
+}
+
 .follows-you-box {
     background-color: #f0f0f0; 
     color: #6c757d; 
@@ -277,3 +302,78 @@ body {
     visibility: visible;
     opacity: 1;
 }
+
+.back-post-arrow{
+    color: black;
+    margin-right: 25px;
+}
+.back-post-span{
+    font-size: 20px;
+}
+.tweet-card-link {
+    display: block;
+    text-decoration: none; 
+    color: inherit; 
+}
+
+.tweet-card-link:hover {
+    background-color: rgba(0, 0, 0, 0.05); 
+}
+
+.tweet-details-link{
+    text-decoration: none;
+    color: inherit;
+}
+.tweet-details-link:hover{
+    text-decoration: none;
+    color: inherit;
+}
+
+.tweet-divider {
+    border: none; 
+    border-top: 1px solid #ccc; 
+    margin: 1rem 0; 
+}
+
+.comment-input {
+    border: none;
+    padding: 10px; 
+    width: 100%; 
+    margin-right: 10px; 
+    margin-top: 15px;
+    resize: none;
+    overflow: hidden;
+    font-size: 20px;
+}
+
+.comment-input:focus{
+    border:none;
+    box-shadow: none;
+}
+
+
+.comment-input:focus{
+    border:none;
+    box-shadow: none;
+}
+
+.tweet-reply-wrapper{
+    display: flex;
+    flex-direction: row;
+}
+
+.tweet-reply-wrapper > img{
+    margin-top: 20px;
+}
+
+.btn-reply {
+    border-radius: 25px;
+    padding: 5px 17px; 
+    font-size: 16px; 
+    font-weight: bold;
+}
+.history-back-div{
+    position: sticky;
+    top: 0;
+}
+
