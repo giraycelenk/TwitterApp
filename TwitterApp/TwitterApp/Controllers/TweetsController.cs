@@ -2,7 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TwitterApp.Data.Abstract;
-using TwitterApp.Entity;
+using TwitterApp.Models;
 
 namespace TwitterApp.Controllers
 {
@@ -88,6 +88,13 @@ namespace TwitterApp.Controllers
             }
 
             return Json(new { success = false });
+        }
+        public async Task<IActionResult> TweetDetails(string username,int tweetId)
+        {
+            int currentUserId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            TweetDetailsViewModel viewModel = await _tweetRepository.GetTweetDetailsAsync(tweetId,currentUserId);
+            return View(viewModel);
+            
         }
     }
 }

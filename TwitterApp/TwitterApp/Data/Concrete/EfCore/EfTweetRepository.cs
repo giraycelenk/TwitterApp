@@ -149,6 +149,35 @@ namespace TwitterApp.Data.Concrete.EfCore
 
             return viewModel;
         }
+        public async Task<TweetDetailsViewModel> GetTweetDetailsAsync(int tweetId,int currentUserId)
+        {
+            var viewModel = new TweetDetailsViewModel
+            {
+                Tweet = new Tweet(),
+                // IsLikedByCurrentUser = new Dictionary<int, bool>(),
+                // IsRetweetedByCurrentUser = new Dictionary<int, bool>()
+            };
+            Dictionary<int,DateTime> tweetsDates = new Dictionary<int,DateTime>();
+            var tweet = await _context.Tweets.FirstOrDefaultAsync(t => t.TweetId == tweetId);
+            
+            viewModel.Tweet = tweet;
+            // var mentions = await GetTweetAndMentionsAsync(tweetId);
+            // viewModel.IsLikedByCurrentUser = mentions.ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
+            // viewModel.IsRetweetedByCurrentUser = mentions.ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
+
+            return viewModel;
+        }
+        // public Task<List<Tweet>> GetTweetAndMentionsAsync(int tweetId)
+        // {
+        //     var Tweets =_context.Tweets.Where(t => t.TweetId == tweetId)
+        //         .Include(t => t.User)
+        //         .Include(t => t.Likes) 
+        //         .Include(t => t.Retweets)
+        //         .Include(t => t.Mentions) 
+        //         .OrderByDescending(t => t.TweetDate) 
+        //         .ToListAsync();
+        //     return Tweets;
+        // }
 
         public async Task<List<Tweet>> GetUserTweetsByUserIdAsync(int userId)
         {
@@ -304,5 +333,6 @@ namespace TwitterApp.Data.Concrete.EfCore
             int tweetsId = isProfilePage && currentUserId != userId ? userId : currentUserId;
             return tweetsId;
         }
+
     }
 }

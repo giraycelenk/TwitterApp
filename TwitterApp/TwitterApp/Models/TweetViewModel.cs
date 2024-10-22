@@ -9,9 +9,9 @@ namespace TwitterApp.Models
         public bool IsProfilePage { get; set; } 
         public User User { get; set; } = null!;
         public User PageUser { get; set; } = null!;
-        public Dictionary<int, bool> IsLikedByCurrentUser { get; set; }
-        public Dictionary<int, bool> IsRetweetedByCurrentUser { get; set; }
-        public Dictionary<int, User> FollowedRetweetsUsers { get; set; }
+        public Dictionary<int, bool> IsLikedByCurrentUser { get; set; } = new();
+        public Dictionary<int, bool> IsRetweetedByCurrentUser { get; set; } = new();
+        public Dictionary<int, User> FollowedRetweetsUsers { get; set; } = new();
 
     }
 }
