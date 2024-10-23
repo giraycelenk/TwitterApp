@@ -22,27 +22,26 @@ namespace TwitterApp.Data.Concrete.EfCore
             
             
             modelBuilder.Entity<Tweet>()
-                .HasOne(t => t.User)
-                .WithMany(u => u.Tweets)
-                .HasForeignKey(t => t.UserId);
+            .HasOne(t => t.User)
+            .WithMany(u => u.Tweets)
+            .HasForeignKey(t => t.UserId);
 
-            
             modelBuilder.Entity<Mention>()
-                .HasOne(m => m.Tweet)
-                .WithMany(t => t.Mentions)
-                .HasForeignKey(m => m.TweetId);
+                .HasOne(m => m.Tweet) 
+                .WithMany(t => t.Mentions) 
+                .HasForeignKey(m => m.TweetId)
+                .OnDelete(DeleteBehavior.Cascade); 
 
-            
             modelBuilder.Entity<Mention>()
-                .HasOne(m => m.MentionedUser)
+                .HasOne(m => m.MentionUser) 
                 .WithMany(u => u.Mentions)
-                .HasForeignKey(m => m.MentionedUserId);
+                .HasForeignKey(m => m.MentionUserId);
 
-           
-            modelBuilder.Entity<Like>()
-                .HasOne(l => l.Tweet)
-                .WithMany(t => t.Likes)
-                .HasForeignKey(l => l.TweetId);
+            modelBuilder.Entity<Mention>()
+                .HasOne(m => m.MentionTweet)
+                .WithMany()
+                .HasForeignKey(m => m.MentionTweetId)
+                .OnDelete(DeleteBehavior.Restrict); 
 
             
             modelBuilder.Entity<Like>()

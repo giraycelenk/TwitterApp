@@ -4,10 +4,12 @@ namespace TwitterApp.Entity
     {
         public int MentionId { get; set; }
         public int TweetId { get; set; }
-        public int MentionedUserId { get; set; }
+        public Tweet Tweet { get; set; } = new(); 
+        public int MentionUserId { get; set; } 
         public DateTime MentionDate { get; set; }
-        public Tweet Tweet { get; set; } = null!;
-        public User MentionedUser { get; set; } = null!;
+        public int MentionTweetId { get; set; }
+        public Tweet MentionTweet { get; set; } = null!; 
+        public User MentionUser { get; set; } = null!; 
         
     }
 }

@@ -154,30 +154,91 @@ namespace TwitterApp.Data.Concrete.EfCore
             var viewModel = new TweetDetailsViewModel
             {
                 Tweet = new Tweet(),
-                // IsLikedByCurrentUser = new Dictionary<int, bool>(),
-                // IsRetweetedByCurrentUser = new Dictionary<int, bool>()
+                Mentions = new List<Tweet>(),
+                IsLikedByCurrentUser = new Dictionary<int, bool>(),
+                IsRetweetedByCurrentUser = new Dictionary<int, bool>()
             };
-            Dictionary<int,DateTime> tweetsDates = new Dictionary<int,DateTime>();
-            var tweet = await _context.Tweets.FirstOrDefaultAsync(t => t.TweetId == tweetId);
+            var tweet = await _context.Tweets
+            .Include(t=>t.User)
+            .Include(t=>t.Likes)
+            .Include(t=>t.Retweets)
+            .Include(t=>t.Mentions)
+            .FirstOrDefaultAsync(t => t.TweetId == tweetId);
             
             viewModel.Tweet = tweet;
-            // var mentions = await GetTweetAndMentionsAsync(tweetId);
-            // viewModel.IsLikedByCurrentUser = mentions.ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
-            // viewModel.IsRetweetedByCurrentUser = mentions.ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
+            var mentions = await GetTweetMentionsAsync(tweetId);
+            viewModel.Mentions = mentions;
+
+            var tweetActivities = new List<Tweet>(mentions) {tweet};
+            viewModel.IsLikedByCurrentUser = tweetActivities.ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
+            viewModel.IsRetweetedByCurrentUser = tweetActivities.ToDictionary(t => t.TweetId, t => t.Retweets.Any(l => l.UserId == currentUserId));
+
 
             return viewModel;
         }
-        // public Task<List<Tweet>> GetTweetAndMentionsAsync(int tweetId)
-        // {
-        //     var Tweets =_context.Tweets.Where(t => t.TweetId == tweetId)
-        //         .Include(t => t.User)
-        //         .Include(t => t.Likes) 
-        //         .Include(t => t.Retweets)
-        //         .Include(t => t.Mentions) 
-        //         .OrderByDescending(t => t.TweetDate) 
-        //         .ToListAsync();
-        //     return Tweets;
-        // }
+        public async Task<List<Tweet>> GetTweetMentionsAsync(int tweetId)
+        {    
+            var mentionedTweets = await _context.Mentions
+                .Where(m => m.TweetId == tweetId) 
+                .Include(m => m.MentionUser)
+                .Include(m => m.MentionTweet) 
+                .ThenInclude(t=>t.User)
+                .Include(m => m.MentionTweet) 
+                .ThenInclude(t=>t.Likes)
+                .Include(m => m.MentionTweet) 
+                .ThenInclude(t=>t.Retweets)
+                .Include(m => m.MentionTweet) 
+                .ThenInclude(t=>t.Mentions)
+                .Select(m => m.MentionTweet)
+                .OrderByDescending(m=>m.TweetDate) 
+                .ToListAsync(); 
+
+            return mentionedTweets;
+        }
+        public async Task AddMention(int tweetId, int userId,TweetCreateModel tweet)
+        {
+            var originalTweet = await _context.Tweets.Include(t => t.Mentions).FirstOrDefaultAsync(t => t.TweetId == tweetId);
+            if (originalTweet == null)
+            {
+                throw new ArgumentException("Tweet not found.");
+            }
+
+            var mentionUser = await _context.Users.FindAsync(userId);
+            if (mentionUser == null)
+            {
+                throw new ArgumentException("Mentioned user not found.");
+            }
+
+            var newTweetContent = tweet.Content;
+            var newTweet = new Tweet
+            {
+                Content = newTweetContent,
+                TweetDate = DateTime.Now,
+                IsDeleted = false,
+                IsMentionTweet = true,
+                UserId = userId,
+                Likes = new List<Like>(),
+                Retweets = new List<Retweet>(),
+                Mentions = new List<Mention>()
+            };
+
+            await _context.Tweets.AddAsync(newTweet);
+
+            var mention = new Mention
+            {
+                TweetId = originalTweet.TweetId,
+                Tweet = originalTweet,
+                MentionUserId = mentionUser.UserId,
+                MentionDate = DateTime.Now,
+                MentionTweetId = newTweet.TweetId,
+                MentionTweet = newTweet,
+                MentionUser = mentionUser
+            };
+
+            originalTweet.Mentions.Add(mention);
+            await _context.Mentions.AddAsync(mention);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task<List<Tweet>> GetUserTweetsByUserIdAsync(int userId)
         {
@@ -185,6 +246,7 @@ namespace TwitterApp.Data.Concrete.EfCore
                                         .Include(t => t.User)
                                         .Include(t => t.Likes)
                                         .Include(t => t.Retweets)
+                                        .Include(t => t.Mentions)
                                         .Where(t => t.UserId == userId && !t.IsDeleted)
                                         .Select(t => new Tweet
                                         {
@@ -328,11 +390,13 @@ namespace TwitterApp.Data.Concrete.EfCore
              
             return followedUserRetweetsDictionary ?? new Dictionary<int,User>();
         }
+        
         public int ProfilePageAndIdControl(int currentUserId, int userId, bool isProfilePage)
         {
             int tweetsId = isProfilePage && currentUserId != userId ? userId : currentUserId;
             return tweetsId;
         }
+
 
     }
 }

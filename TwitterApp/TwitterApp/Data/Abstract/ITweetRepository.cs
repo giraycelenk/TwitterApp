@@ -13,6 +13,7 @@ namespace TwitterApp.Data.Abstract
         void AddRetweet(int tweetId, int userId);
         void RemoveRetweet(int tweetId, int userId);
         void UpdateTweet(Tweet tweet);
+        Task AddMention(int tweetId, int userId,TweetCreateModel tweet);
         Task<List<Tweet>> GetAllTweetsAsync();
         Task<List<Tweet>> GetAllTweetsAndRetweetsByUserIdAsync(int userId,bool isProfilePage);
         Task<List<Tweet>> GetUserTweetsByUserIdAsync(int userId);
@@ -23,7 +24,7 @@ namespace TwitterApp.Data.Abstract
         Task<Dictionary<int,User>> GetFollowedRetweetsDictionaryAsync(int userId);
         Task<TweetViewModel> GetTweetsAndActivitiesByUserIdAsync(int currentUserId,int userId,User currentUser,User pageUser,bool isProfilePage);
         Task<TweetDetailsViewModel> GetTweetDetailsAsync(int tweetId,int currentUserId);
-        
+        Task<List<Tweet>> GetTweetMentionsAsync(int tweetId);
         int ProfilePageAndIdControl(int currentUserId,int userId,bool isProfilePage);
     }
 }

@@ -1,5 +1,5 @@
 @model TweetDetailsViewModel
-@if (Model != null && Model.Tweet != null)
+@if(Model != null && Model.Tweet != null)
 {
     <div class="card tweet-card">
         <div class="card-body">
@@ -50,16 +50,21 @@
             <hr class="tweet-divider" />
             <div>
                 <div class="tweet-actions">  
-                    <a href="#" class="reply">
-                        <i class="far fa-comment"></i>
-                    </a>
+                    <div>
+                        <a href="" class="reply">
+                            <i class="far fa-comment"></i>
+                        </a>
+                        <small class="mention-count @(@Model.Mentions.Count() > 0 ? "visible" : "")">
+                            @Model.Mentions.Count()
+                        </small>
+                    </div>
                     <div>
                         <a href="#" class="retweet" data-tweet-id="@Model.Tweet.TweetId" 
                             data-retweet-url="@Url.Action("Retweet", "Tweets")"
                             data-unretweet-url="@Url.Action("UnRetweet", "Tweets")">
-                            <i class="fa fa-retweet @(Model.IsRetweetedByCurrentUser[Model.Tweet.TweetId] ? "text-success" : "text-secondary")"></i>
+                            <i class="fa fa-retweet @(Model.IsRetweetedByCurrentUser[Model.Tweet.TweetId] ? "text-success" : "")"></i>
                         </a>
-                        <small class="retweet-count @(Model.Tweet.Retweets.Count() > 0 ? "visible" : "") @(Model.IsRetweetedByCurrentUser[Model.Tweet.TweetId] ? "text-success" : "text-secondary")">
+                        <small class="retweet-count @(Model.Tweet.Retweets.Count() > 0 ? "visible" : "") @(Model.IsRetweetedByCurrentUser[Model.Tweet.TweetId] ? "text-success" : "")">
                             @Model.Tweet.Retweets.Count()
                         </small>
                     </div>              
@@ -67,19 +72,20 @@
                         <a href="#" class="like" data-tweet-id="@Model.Tweet.TweetId" 
                             data-like-url="@Url.Action("LikeTweet", "Tweets")"
                             data-unlike-url="@Url.Action("UnlikeTweet", "Tweets")">
-                            <i class="@(Model.IsLikedByCurrentUser[Model.Tweet.TweetId] ? "fas text-danger" : "far text-secondary") fa-heart"></i>
+                            <i class="@(Model.IsLikedByCurrentUser[Model.Tweet.TweetId] ? "fas text-danger" : "far") fa-heart"></i>
                         </a>
-                        <small class="like-count @(Model.Tweet.Likes.Count() > 0 ? "visible" : "") @(Model.IsLikedByCurrentUser[Model.Tweet.TweetId] ? "text-danger" : "text-secondary")">
+                        <small class="like-count @(Model.Tweet.Likes.Count() > 0 ? "visible" : "") @(Model.IsLikedByCurrentUser[Model.Tweet.TweetId] ? "text-danger" : "")">
                             @Model.Tweet.Likes.Count()
                         </small>
                     </div>
                 </div>
             </div>
-            <hr class="tweet-divider" />
-            <form class="mention-form" method="post">
+            <hr class="tweet-divider"/>
+            <form class="mention-form" asp-controller="Tweets" asp-action="AddMention" method="post">
                 <div class="card-body tweet-reply-wrapper">
                     <img src="~/img/@Model.Tweet.User.Image" alt="@Model.Tweet.User.Name" class="avatar me-2"/>
-                    <textarea class="form-control comment-input" placeholder="Post your reply" maxlength="280" oninput="updateCharCount(this)"></textarea>
+                    <input type="hidden" name="tweetId" value="@Model.Tweet.TweetId">
+                    <textarea class="form-control comment-input" name="Content" placeholder="Post your reply" maxlength="280" oninput="updateCharCount(this)"></textarea>
                 </div>
                 <div class="mt-2 d-flex justify-content-end align-items-center">
                     <small id="charCount" class="text-muted me-2">280 characters</small>
@@ -92,8 +98,93 @@
 }
 else
 {
-    <p>No tweets available.</p>
+    <p>No tweet available.</p>
 }
+
+@if(Model.Mentions != null && Model.Mentions.Count > 0)
+{
+    @foreach(var tweet in Model.Mentions)
+    {
+        <div class="card tweet-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-start align-items-center">
+                    <a href="/@tweet.User.Username">
+                        <img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/>
+                    </a>
+                    <div>
+                        <div class="d-flex align-items-center">
+                            <a href="/@tweet.User.Username" class="tweet-user-name-link"><h6 class="card-title mb-0 me-1" >@tweet.User.Name</h6></a>
+                            <small><a href="/@tweet.User.Username" class="tweet-username-link">@($"@{tweet.User.Username}") </a>· 
+                                @{
+                                    DateTime tweetDate = tweet.TweetDate;
+                                    DateTime now = DateTime.Now;
+                                    TimeSpan timeDifference = now - tweetDate;
+                                    string timeAgo;
+                                
+                                    if (timeDifference.TotalMinutes < 60) 
+                                    {
+                                        timeAgo = $"{(int)timeDifference.TotalMinutes}m";
+                                    }
+                                    else if (timeDifference.TotalHours < 24) 
+                                    {
+                                        timeAgo = $"{(int)timeDifference.TotalHours}h";
+                                    }
+                                    else 
+                                    {
+                                        timeAgo = $"{(int)timeDifference.TotalDays}d";
+                                    }
+                                    string fullDate = tweetDate.ToString("h:mm tt · MMM d, yyyy");
+                                }
+                                <span class="time-ago-container">
+                                    <a href="@Url.Action("TweetDetails", "Tweets", new { username = @tweet.User.Username, tweetid = @tweet.TweetId })" class="tweet-details-link">
+                                        @timeAgo
+                                    </a>
+                                    <span class="tooltip">@fullDate</span>
+                                </span>
+                            </small>
+                        </div>
+                        <p class="card-text mt-2">@tweet.Content</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="tweet-actions">
+                        <div>
+                            <a asp-controller="Tweets" asp-action="TweetDetails"
+                                asp-route-username="@tweet.User.Username" 
+                                asp-route-tweetId="@tweet.TweetId" class="reply">
+                                <i class="far fa-comment"></i>
+                            </a>
+                            <small class="mention-count @(tweet.Mentions.Count() > 0 ? "visible" : "")">
+                                @tweet.Mentions.Count()
+                            </small>
+                        </div>
+                        <div>
+                            <a href="#" class="retweet" data-tweet-id="@tweet.TweetId" 
+                                data-retweet-url="@Url.Action("Retweet", "Tweets")"
+                                data-unretweet-url="@Url.Action("UnRetweet", "Tweets")">
+                                <i class="fa fa-retweet @(Model.IsRetweetedByCurrentUser[tweet.TweetId] ? "text-success" : "")"></i>
+                            </a>
+                            <small class="retweet-count @(tweet.Retweets.Count() > 0 ? "visible" : "") @(Model.IsRetweetedByCurrentUser[tweet.TweetId] ? "text-success" : "")">
+                                @tweet.Retweets.Count()
+                            </small>
+                        </div>              
+                        <div>
+                            <a href="#" class="like" data-tweet-id="@tweet.TweetId" 
+                                data-like-url="@Url.Action("LikeTweet", "Tweets")"
+                                data-unlike-url="@Url.Action("UnlikeTweet", "Tweets")">
+                                <i class="@(Model.IsLikedByCurrentUser[tweet.TweetId] ? "fas text-danger" : "far") fa-heart"></i>
+                            </a>
+                            <small class="like-count @(tweet.Likes.Count() > 0 ? "visible" : "") @(Model.IsLikedByCurrentUser[tweet.TweetId] ? "text-danger" : "")">
+                                @tweet.Likes.Count()
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
 
 
 

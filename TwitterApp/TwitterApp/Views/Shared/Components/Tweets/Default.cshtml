@@ -62,10 +62,17 @@
                     </div>
                 </div>
                 <div>
-                    <div class="tweet-actions">  
-                        <a href="#" class="reply">
-                            <i class="far fa-comment"></i>
-                        </a>
+                    <div class="tweet-actions">
+                        <div>
+                            <a asp-controller="Tweets" asp-action="TweetDetails"
+                                asp-route-username="@tweet.User.Username" 
+                                asp-route-tweetId="@tweet.TweetId" class="reply">
+                                <i class="far fa-comment"></i>
+                            </a>
+                            <small class="mention-count @(tweet.Mentions.Count() > 0 ? "visible" : "")">
+                                @tweet.Mentions.Count()
+                            </small>
+                        </div>
                         <div>
                             <a href="#" class="retweet" data-tweet-id="@tweet.TweetId" 
                                 data-retweet-url="@Url.Action("Retweet", "Tweets")"

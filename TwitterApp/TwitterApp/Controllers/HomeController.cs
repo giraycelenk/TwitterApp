@@ -23,33 +23,7 @@ public class HomeController : Controller
     {
         return View();
     }
-    [Authorize]
-    [HttpPost]
-    public async Task<IActionResult> CreateTweet(TweetCreateModel tweet)
-    {
-        if (ModelState.IsValid)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!string.IsNullOrEmpty(userId))
-            {
-                var user = await _userRepository.Users.FirstOrDefaultAsync(u => u.UserId == Convert.ToInt32(userId));
-                
-                if (!string.IsNullOrEmpty(tweet.Content))
-                {
-                    _tweetRepository.CreateTweet(new Tweet
-                    {
-                        Content = tweet.Content,
-                        TweetDate = DateTime.Now,
-                        IsDeleted = false,
-                        UserId = Convert.ToInt32(userId),
-                        User = user ?? new User(),
-                    });
-                }
-            }
-        }
-
-        return RedirectToAction("Index");
-    }
+    
     
 
 }
