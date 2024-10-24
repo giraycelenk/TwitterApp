@@ -62,6 +62,12 @@ body {
     border: 2px solid white; 
     margin-right: 10px; 
 }
+.line {
+    width: 1px; 
+    background-color: #ccc; 
+    height: 50px; 
+    margin: 0 15px; 
+}
 .user-info {
     display: flex;
     flex-direction: column;
@@ -273,7 +279,9 @@ body {
     color: inherit;
     text-decoration: none;
 }
-
+.tweet-username-link-reply{
+    color:#0099ff
+}
 .tweet-username-link:hover {
     color: inherit; 
     text-decoration: none; 
@@ -392,7 +400,7 @@ body {
     position: sticky;
     top: 0;
     background-color: rgba(0, 0, 0, 0);
-    backdrop-filter: blur(1px);
-    
+    backdrop-filter: blur(1px); 
 }
+
 

@@ -4,7 +4,87 @@
     @foreach(var tweet in Model.Tweets)
     {
         <div class="card tweet-card">
-            <div class="card-body">
+        @if(tweet.IsMentionTweet == true)
+        {
+            <div class="card-body" style="@(tweet.IsMentionTweet == true ? "padding-bottom: 0px;" : "")">
+                <div class="d-flex justify-content-start align-items-center">
+                    <a href="/@tweet.MentionedTweet.User.Username">
+                        <img src="~/img/@tweet.MentionedTweet.User.Image" alt="@tweet.MentionedTweet.User.Name" class="avatar me-2"/>
+                    </a>
+                    <div>
+                        <div class="d-flex align-items-center">
+                            <a href="/@tweet.MentionedTweet.User.Username" class="tweet-user-name-link"><h6 class="card-title mb-0 me-1" >@tweet.MentionedTweet.User.Name</h6></a>
+                            <small><a href="/@tweet.MentionedTweet.User.Username" class="tweet-username-link">@($"@{tweet.MentionedTweet.User.Username}") </a>· 
+                                @{
+                                    DateTime mentionedTweetDate = tweet.MentionedTweet.TweetDate;
+                                    DateTime mentionedNow = DateTime.Now;
+                                    TimeSpan mentionedTimeDifference = mentionedNow - mentionedTweetDate;
+                                    string mentionedTimeAgo;
+                                
+                                    if (mentionedTimeDifference.TotalMinutes < 60) 
+                                    {
+                                        mentionedTimeAgo = $"{(int)mentionedTimeDifference.TotalMinutes}m";
+                                    }
+                                    else if (mentionedTimeDifference.TotalHours < 24) 
+                                    {
+                                        mentionedTimeAgo = $"{(int)mentionedTimeDifference.TotalHours}h";
+                                    }
+                                    else 
+                                    {
+                                        mentionedTimeAgo = $"{(int)mentionedTimeDifference.TotalDays}d";
+                                    }
+                                    string mentionedFullDate = mentionedTweetDate.ToString("h:mm tt · MMM d, yyyy");
+                                }
+                                <span class="time-ago-container">
+                                    <a href="@Url.Action("TweetDetails", "Tweets", new { username = @tweet.MentionedTweet.User.Username, tweetid = @tweet.MentionedTweet.TweetId })" class="tweet-details-link">
+                                        @mentionedTimeAgo
+                                    </a>
+                                    <span class="tooltip">@mentionedFullDate</span>
+                                </span>
+                            </small>
+                        </div>
+                        <p class="card-text mt-2">@tweet.MentionedTweet.Content</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="tweet-actions">
+                        <div>
+                            <a asp-controller="Tweets" asp-action="TweetDetails"
+                                asp-route-username="@tweet.User.Username" 
+                                asp-route-tweetId="@tweet.MentionedTweet.TweetId" class="reply">
+                                <i class="far fa-comment"></i>
+                            </a>
+                            <small class="mention-count @(tweet.MentionedTweet.Mentions.Count() > 0 ? "visible" : "")">
+                                @tweet.MentionedTweet.Mentions.Count()
+                            </small>
+                        </div>
+                        <div>
+                            <a href="#" class="retweet" data-tweet-id="@tweet.MentionedTweet.TweetId" 
+                                data-retweet-url="@Url.Action("Retweet", "Tweets")"
+                                data-unretweet-url="@Url.Action("UnRetweet", "Tweets")">
+                                <i class="fa fa-retweet @(Model.IsRetweetedByCurrentUser[tweet.MentionedTweet.TweetId] ? "text-success" : "")"></i>
+                            </a>
+                            <small class="retweet-count @(tweet.MentionedTweet.Retweets.Count() > 0 ? "visible" : "") @(Model.IsRetweetedByCurrentUser[tweet.MentionedTweet.TweetId] ? "text-success" : "")">
+                                @tweet.MentionedTweet.Retweets.Count()
+                            </small>
+                        </div>              
+                        <div>
+                            <a href="#" class="like" data-tweet-id="@tweet.MentionedTweet.TweetId" 
+                                data-like-url="@Url.Action("LikeTweet", "Tweets")"
+                                data-unlike-url="@Url.Action("UnlikeTweet", "Tweets")">
+                                <i class="@(Model.IsLikedByCurrentUser[tweet.MentionedTweet.TweetId] ? "fas text-danger" : "far") fa-heart"></i>
+                            </a>
+                            <small class="like-count @(tweet.MentionedTweet.Likes.Count() > 0 ? "visible" : "") @(Model.IsLikedByCurrentUser[tweet.MentionedTweet.TweetId] ? "text-danger" : "")">
+                                @tweet.MentionedTweet.Likes.Count()
+                            </small>
+                        </div>
+                    </div>
+                    <div class="line"></div>
+                </div>
+            </div>
+            
+        }
+            <div class="card-body" style = "@(tweet.IsMentionTweet == true ? "padding-top: 0px;" : "")">
                 <div class="d-flex justify-content-start align-items-center">
                     <a href="/@tweet.User.Username">
                         <img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/>
@@ -25,7 +105,6 @@
                                 }
                                 <a href="/@username" class="gray-link">@linkText</a>
                             </small> 
-                            
                         }
                         <div class="d-flex align-items-center">
                             <a href="/@tweet.User.Username" class="tweet-user-name-link"><h6 class="card-title mb-0 me-1" >@tweet.User.Name</h6></a>
@@ -58,6 +137,10 @@
                                 </span>
                             </small>
                         </div>
+                        @if(tweet.IsMentionTweet == true)
+                        {
+                            <small>Replying to <a href="/@tweet.MentionedTweet.User.Username" class="tweet-username-link-reply">@($"@{tweet.MentionedTweet.User.Username}") </a></small>
+                        }
                         <p class="card-text mt-2">@tweet.Content</p>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ namespace TwitterApp.Entity
         public DateTime TweetDate { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsMentionTweet { get; set; }
+        public Tweet? MentionedTweet { get; set; }
         public int UserId { get; set; }
         public User User { get; set; } = null!;
 

@@ -143,8 +143,16 @@ namespace TwitterApp.Data.Concrete.EfCore
             }
             viewModel.Tweets.AddRange(tweets);
             viewModel.TweetsDates = tweetsDates;
-            viewModel.IsLikedByCurrentUser = tweets.ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
-            viewModel.IsRetweetedByCurrentUser = tweets.ToDictionary(t => t.TweetId, t => t.Retweets.Any(r => r.UserId == currentUserId));
+            viewModel.IsLikedByCurrentUser = _context
+                                            .Tweets
+                                            .Include(t => t.Likes)
+                                            .Include(t => t.User)
+                                            .ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
+            viewModel.IsRetweetedByCurrentUser = _context
+                                                .Tweets
+                                                .Include(t => t.Retweets)
+                                                .Include(t => t.User)
+                                                .ToDictionary(t => t.TweetId, t => t.Retweets.Any(r => r.UserId == currentUserId));
             viewModel.FollowedRetweetsUsers = await GetFollowedRetweetsDictionaryAsync(ProfilePageAndIdControl(currentUserId,userId,isProfilePage));
 
             return viewModel;
@@ -170,10 +178,16 @@ namespace TwitterApp.Data.Concrete.EfCore
             viewModel.Mentions = mentions;
 
             var tweetActivities = new List<Tweet>(mentions) {tweet};
-            viewModel.IsLikedByCurrentUser = tweetActivities.ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
-            viewModel.IsRetweetedByCurrentUser = tweetActivities.ToDictionary(t => t.TweetId, t => t.Retweets.Any(l => l.UserId == currentUserId));
-
-
+            viewModel.IsLikedByCurrentUser = _context
+                                            .Tweets
+                                            .Include(t => t.Likes)
+                                            .Include(t => t.User)
+                                            .ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
+            viewModel.IsRetweetedByCurrentUser = _context
+                                                .Tweets
+                                                .Include(t => t.Retweets)
+                                                .Include(t => t.User)
+                                                .ToDictionary(t => t.TweetId, t => t.Retweets.Any(r => r.UserId == currentUserId));
             return viewModel;
         }
         public async Task<List<Tweet>> GetTweetMentionsAsync(int tweetId)
@@ -216,6 +230,7 @@ namespace TwitterApp.Data.Concrete.EfCore
                 TweetDate = DateTime.Now,
                 IsDeleted = false,
                 IsMentionTweet = true,
+                MentionedTweet = originalTweet,
                 UserId = userId,
                 Likes = new List<Like>(),
                 Retweets = new List<Retweet>(),
@@ -247,6 +262,14 @@ namespace TwitterApp.Data.Concrete.EfCore
                                         .Include(t => t.Likes)
                                         .Include(t => t.Retweets)
                                         .Include(t => t.Mentions)
+                                        .Include(t => t.MentionedTweet)
+                                        .ThenInclude(mt => mt.User)
+                                        .Include(t => t.MentionedTweet)
+                                        .ThenInclude(mt => mt.Likes)
+                                        .Include(t => t.MentionedTweet)
+                                        .ThenInclude(mt => mt.Retweets)
+                                        .Include(t => t.MentionedTweet)
+                                        .ThenInclude(mt => mt.Mentions)
                                         .Where(t => t.UserId == userId && !t.IsDeleted)
                                         .Select(t => new Tweet
                                         {
@@ -256,6 +279,8 @@ namespace TwitterApp.Data.Concrete.EfCore
                                             Retweets = t.Retweets,
                                             Likes = t.Likes,
                                             Mentions = t.Mentions,
+                                            IsMentionTweet = t.IsMentionTweet,
+                                            MentionedTweet = t.MentionedTweet,
                                             User = t.User
                                         }).ToListAsync();  
             return userTweets ?? new List<Tweet>();
@@ -271,6 +296,8 @@ namespace TwitterApp.Data.Concrete.EfCore
                                         .ThenInclude(t => t.Retweets)
                                         .Include(r => r.Tweet)
                                         .ThenInclude(t => t.Mentions)
+                                        .Include(r => r.Tweet)
+                                        .ThenInclude(t => t.MentionedTweet)
                                         .Where(r => r.UserId == userId && !r.Tweet.IsDeleted) 
                                         .Select(r => new Tweet
                                         {
@@ -280,6 +307,7 @@ namespace TwitterApp.Data.Concrete.EfCore
                                             Retweets = r.Tweet.Retweets,
                                             Likes = r.Tweet.Likes,
                                             Mentions = r.Tweet.Mentions,
+                                            MentionedTweet = r.Tweet.MentionedTweet,
                                             User = r.Tweet.User
                                         }).ToListAsync();
             return userRetweets ?? new List<Tweet>();
@@ -293,6 +321,14 @@ namespace TwitterApp.Data.Concrete.EfCore
                                         .Include(t => t.Likes)
                                         .Include(t => t.Retweets)
                                         .Include(t => t.Mentions)
+                                        .Include(t => t.MentionedTweet)
+                                        .ThenInclude(mt => mt.User)
+                                        .Include(t => t.MentionedTweet)
+                                        .ThenInclude(mt => mt.Likes)
+                                        .Include(t => t.MentionedTweet)
+                                        .ThenInclude(mt => mt.Retweets)
+                                        .Include(t => t.MentionedTweet)
+                                        .ThenInclude(mt => mt.Mentions)
                                         .Where(t => _context.UserFollows
                                             .Where(f => f.FollowerUserId == userId)
                                             .Select(f => f.FollowingUserId)
@@ -305,6 +341,8 @@ namespace TwitterApp.Data.Concrete.EfCore
                                             Retweets = t.Retweets,
                                             Likes = t.Likes,
                                             Mentions = t.Mentions,
+                                            IsMentionTweet = t.IsMentionTweet,
+                                            MentionedTweet = t.MentionedTweet,
                                             User = t.User
                                         }).ToListAsync();
             return followedUserTweets ?? new List<Tweet>();
@@ -320,6 +358,8 @@ namespace TwitterApp.Data.Concrete.EfCore
                                             .ThenInclude(t => t.Retweets)
                                             .Include(r => r.Tweet)
                                             .ThenInclude(t => t.Mentions)
+                                            .Include(r => r.Tweet)
+                                            .ThenInclude(t => t.MentionedTweet)
                                             .Where(r => _context.UserFollows
                                                 .Where(f => f.FollowerUserId == userId)
                                                 .Select(f => f.FollowingUserId)
@@ -332,6 +372,8 @@ namespace TwitterApp.Data.Concrete.EfCore
                                                 Retweets = r.Tweet.Retweets,
                                                 Likes = r.Tweet.Likes,
                                                 Mentions = r.Tweet.Mentions,
+                                                MentionedTweet = r.Tweet.MentionedTweet,
+
                                                 User = r.Tweet.User
                                             }).ToListAsync();
             return followedUserRetweets ?? new List<Tweet>();
@@ -346,6 +388,8 @@ namespace TwitterApp.Data.Concrete.EfCore
                                         .ThenInclude(t => t.Retweets)
                                         .Include(r => r.Tweet)
                                         .ThenInclude(t => t.Mentions)
+                                        .Include(r => r.Tweet)
+                                            .ThenInclude(t => t.MentionedTweet)
                                         .Where(r => r.UserId == userId && !r.Tweet.IsDeleted) 
                                         .Select(r => new Retweet
                                         {
@@ -361,6 +405,8 @@ namespace TwitterApp.Data.Concrete.EfCore
                                             .ThenInclude(t => t.Retweets)
                                             .Include(r => r.Tweet)
                                             .ThenInclude(t => t.Mentions)
+                                            .Include(r => r.Tweet)
+                                            .ThenInclude(t => t.MentionedTweet)
                                             .Where(r => _context.UserFollows
                                                 .Where(f => f.FollowerUserId == userId)
                                                 .Select(f => f.FollowingUserId)
