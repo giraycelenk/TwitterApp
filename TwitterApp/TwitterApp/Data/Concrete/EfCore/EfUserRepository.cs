@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TwitterApp.Data.Abstract;
 using TwitterApp.Entity;
+using TwitterApp.Models;
 using TwitterApp.ViewComponents;
 
 namespace TwitterApp.Data.Concrete.EfCore
@@ -57,6 +58,39 @@ namespace TwitterApp.Data.Concrete.EfCore
                         .ToList();
 
             return userFollows.Select(uf => uf.FollowerUser).ToList();
+        }
+        public async Task<FollowersViewModel> GetFollowersForProfileAsync(string username,int userId)
+        {
+            var currentUser = await _context.Users
+                                    .Include(u => u.Followers)
+                                    .Include(u => u.Following)
+                                    .FirstOrDefaultAsync(x => x.UserId == userId);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
+            var userFollows = _context
+                        .UserFollows
+                        .Where(uf => uf.FollowingUserId == user.UserId)
+                        .ToList();
+            List<User> followers = new List<User>();
+            Dictionary<int,bool> isFollower = new Dictionary<int,bool>();
+            Dictionary<int,bool> isFollowing = new Dictionary<int,bool>();
+            foreach(var userFollow in userFollows)
+            {
+                followers.Add
+                (
+                    await _context.Users.FirstOrDefaultAsync(u => u.UserId == userFollow.FollowerUserId)
+                );
+                isFollower[userFollow.FollowerUserId] = currentUser.Followers.Any(f => f.FollowerUserId == userFollow.FollowerUserId);
+                isFollowing[userFollow.FollowerUserId] = currentUser.Following.Any(f => f.FollowingUserId == userFollow.FollowerUserId);
+
+            }
+        
+            return new FollowersViewModel {
+                User = user,
+                CurrentUser = currentUser,
+                Followers = followers,
+                IsFollowing = isFollowing,
+                IsFollower = isFollower
+            };
         }
         public List<User> GetFollowings(int userId)
         {

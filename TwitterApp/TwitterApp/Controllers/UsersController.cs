@@ -136,5 +136,11 @@ namespace TwitterApp.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+        public async Task<IActionResult> Followers(string username)
+        {
+            var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            FollowersViewModel followerViewModel = await _userRepository.GetFollowersForProfileAsync(username,currentUserId);
+            return View(followerViewModel);
+        }
     }
 }

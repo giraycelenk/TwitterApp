@@ -48,6 +48,11 @@ app.MapControllerRoute(
     defaults:new{controller = "Users", action="Profile"}
 );
 app.MapControllerRoute(
+    name: "user_followers",
+    pattern:"{username}/followers",
+    defaults:new{controller = "Users", action="Followers"}
+);
+app.MapControllerRoute(
     name: "tweet_details",
     pattern:"{username}/status/{tweetid}",
     defaults:new{controller = "Tweets", action="TweetDetails"}

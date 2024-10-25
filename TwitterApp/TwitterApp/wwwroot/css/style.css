@@ -402,5 +402,11 @@ body {
     background-color: rgba(0, 0, 0, 0);
     backdrop-filter: blur(1px); 
 }
+.is-mentioned-tweet{
+    padding-bottom: 0px;
+}
+.is-mention-tweet{
+    padding-top: 0px;
+}
 
 

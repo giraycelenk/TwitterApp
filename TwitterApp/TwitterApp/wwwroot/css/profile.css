@@ -70,3 +70,38 @@
     background-color: rgba(0, 0, 0, 0);
     backdrop-filter: blur(1px); 
 }
+.profile-followers-link{
+    text-decoration: none;
+    color: inherit;
+}
+.profile-followers-link:hover{
+    color: inherit;
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 400px;
+    background-color: #fff;
+}
+.follower-username-link{
+    text-decoration: none;
+    color: inherit;
+}
+.custom-container-followers {
+    padding-top: 5%; 
+    padding-bottom: 0; 
+    margin-top: 0;
+    max-width: 50%;   
+}
+.card-body-followers{
+    padding: 15px;
+}
+.card-body-followers-history-back{
+    padding: 0px;
+    padding-top: 15px;
+}
