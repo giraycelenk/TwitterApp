@@ -1,9 +1,9 @@
 @model ProfileViewModel
 <link rel="stylesheet" href="~/css/profile.css">
 <div class="card profile-tweet-card">
-    <div class="d-flex align-items-center ml-4 mb-3 history-back-div-profile">
+    <div class="d-flex align-items-center mb-3 history-back-div-profile">
         <a href="javascript:history.back()" class="me-2"> 
-            <i class="fas fa-arrow-left back-post-arrow"></i>
+            <i class="fas fa-arrow-left back-post-arrow ml-4"></i>
         </a>
         <div>
             <span class="fw-bold back-post-span">@Model.User.Name</span>
@@ -12,8 +12,8 @@
             </div>
         </div>
     </div>
+    <div class="cover-photo" style="background: url('img/@Model.User.HeaderImage') no-repeat center center; height: 200px; background-size: cover;"></div>
     <div class="ml-3">
-        <div class="cover-photo"></div>
         <div class="d-flex align-items-center">
             <img src="~/img/@Model.User.Image" alt="Profil Fotoğrafı" class="profile-photo">
             @if (User.Identity != null && User.Identity.IsAuthenticated && Model.User.UserId != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
@@ -54,7 +54,7 @@
             
         </div>
         <div class="mt-2">
-            <strong>@Model.User.Following.Count() </strong><small class="profile-statistics mr-3">Following</small>
+            <a href="@Model.User.Username/Following" class="profile-followers-link"><strong>@Model.User.Following.Count() </strong><small class="profile-statistics">Following</small></a>
             <a href="@Model.User.Username/Followers" class="profile-followers-link"><strong class="followers-count">@Model.User.Followers.Count() </strong><small class="profile-statistics">Followers</small></a>
         </div>
     </div>
