@@ -59,7 +59,7 @@ namespace TwitterApp.Data.Concrete.EfCore
 
             return userFollows.Select(uf => uf.FollowerUser).ToList();
         }
-        public async Task<FollowersViewModel> GetFollowersForProfileAsync(string username,int userId)
+        public async Task<FollowViewModel> GetFollowersForProfileAsync(string username,int userId)
         {
             var currentUser = await _context.Users
                                     .Include(u => u.Followers)
@@ -84,10 +84,43 @@ namespace TwitterApp.Data.Concrete.EfCore
 
             }
         
-            return new FollowersViewModel {
+            return new FollowViewModel {
                 User = user,
                 CurrentUser = currentUser,
                 Followers = followers,
+                IsFollowing = isFollowing,
+                IsFollower = isFollower
+            };
+        }
+        public async Task<FollowViewModel> GetFollowingForProfileAsync(string username,int userId)
+        {
+            var currentUser = await _context.Users
+                                    .Include(u => u.Followers)
+                                    .Include(u => u.Following)
+                                    .FirstOrDefaultAsync(x => x.UserId == userId);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
+            var userFollows = _context
+                        .UserFollows
+                        .Where(uf => uf.FollowerUserId == user.UserId)
+                        .ToList();
+            List<User> following = new List<User>();
+            Dictionary<int,bool> isFollower = new Dictionary<int,bool>();
+            Dictionary<int,bool> isFollowing = new Dictionary<int,bool>();
+            foreach(var userFollow in userFollows)
+            {
+                following.Add
+                (
+                    await _context.Users.FirstOrDefaultAsync(u => u.UserId == userFollow.FollowingUserId)
+                );
+                isFollower[userFollow.FollowingUserId] = currentUser.Followers.Any(f => f.FollowerUserId == userFollow.FollowingUserId);
+                isFollowing[userFollow.FollowingUserId] = currentUser.Following.Any(f => f.FollowingUserId == userFollow.FollowingUserId);
+
+            }
+        
+            return new FollowViewModel {
+                User = user,
+                CurrentUser = currentUser,
+                Following = following,
                 IsFollowing = isFollowing,
                 IsFollower = isFollower
             };

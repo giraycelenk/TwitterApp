@@ -2,7 +2,7 @@
 @if(Model != null && Model.Tweet != null)
 {
     <div class="card tweet-card">
-        <div class="card-body">
+        <div class="card-body card-body-details">
             <div class="d-flex align-items-center mb-3 history-back-div">
                 <a href="javascript:history.back()" class="me-2"> 
                     <i class="fas fa-arrow-left back-post-arrow"></i>
@@ -83,7 +83,7 @@
             <hr class="tweet-divider"/>
             <form class="mention-form" asp-controller="Tweets" asp-action="AddMention" method="post">
                 <div class="card-body tweet-reply-wrapper">
-                    <img src="~/img/@Model.Tweet.User.Image" alt="@Model.Tweet.User.Name" class="avatar me-2"/>
+                    <img src="~/img/@Model.CurrentUser.Image" alt="@Model.CurrentUser.Name" class="avatar me-2"/>
                     <input type="hidden" name="tweetId" value="@Model.Tweet.TweetId">
                     <textarea class="form-control comment-input" name="Content" placeholder="Post your reply" maxlength="280" oninput="updateCharCount(this)"></textarea>
                 </div>

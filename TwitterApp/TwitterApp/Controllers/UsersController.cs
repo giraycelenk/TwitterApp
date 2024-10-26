@@ -139,7 +139,13 @@ namespace TwitterApp.Controllers
         public async Task<IActionResult> Followers(string username)
         {
             var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            FollowersViewModel followerViewModel = await _userRepository.GetFollowersForProfileAsync(username,currentUserId);
+            FollowViewModel followerViewModel = await _userRepository.GetFollowersForProfileAsync(username,currentUserId);
+            return View(followerViewModel);
+        }
+        public async Task<IActionResult> Following(string username)
+        {
+            var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            FollowViewModel followerViewModel = await _userRepository.GetFollowingForProfileAsync(username,currentUserId);
             return View(followerViewModel);
         }
     }

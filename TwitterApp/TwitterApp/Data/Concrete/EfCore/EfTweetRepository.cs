@@ -163,9 +163,12 @@ namespace TwitterApp.Data.Concrete.EfCore
             {
                 Tweet = new Tweet(),
                 Mentions = new List<Tweet>(),
+                CurrentUser = new User(),
                 IsLikedByCurrentUser = new Dictionary<int, bool>(),
                 IsRetweetedByCurrentUser = new Dictionary<int, bool>()
             };
+            var currentUser = await _context.Users
+                                    .FirstOrDefaultAsync(x => x.UserId == currentUserId);
             var tweet = await _context.Tweets
             .Include(t=>t.User)
             .Include(t=>t.Likes)
@@ -176,7 +179,7 @@ namespace TwitterApp.Data.Concrete.EfCore
             viewModel.Tweet = tweet;
             var mentions = await GetTweetMentionsAsync(tweetId);
             viewModel.Mentions = mentions;
-
+            viewModel.CurrentUser = currentUser;
             var tweetActivities = new List<Tweet>(mentions) {tweet};
             viewModel.IsLikedByCurrentUser = _context
                                             .Tweets

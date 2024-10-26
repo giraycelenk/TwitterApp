@@ -15,29 +15,29 @@
     </div>
 </div>
 <div class="card">
-    @if(Model.Followers.Count > 0)
+    @if(Model.Following.Count > 0)
     {
-        @foreach(var follower in Model.Followers)
+        @foreach(var following in Model.Following)
         {
             <div class="card-body card-body-followers">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="d-flex justify-content-start align-items-start">
-                        <a href="/@follower.Username">
-                            <img src="~/img/@follower.Image" alt="@follower.Name" class="avatar me-2"/>
+                        <a href="/@following.Username">
+                            <img src="~/img/@following.Image" alt="@following.Name" class="avatar me-2"/>
                         </a>
                         <div>
                             <div class="d-flex align-items-center">
-                                <a href="/@follower.Username" class="tweet-user-name-link">
-                                    <h6 class="card-title mb-0 me-1">@follower.Name</h6>
+                                <a href="/@following.Username" class="tweet-user-name-link">
+                                    <h6 class="card-title mb-0 me-1">@following.Name</h6>
                                 </a>
                             </div>
                             <div>
                                 <div>
-                                    <a href="/@follower.Username" class="tweet-username-link">
-                                        <span class="text-muted">@($"@{follower.Username}")</span>
-                                        @if(Model.CurrentUser.Username != follower.Username)
+                                    <a href="/@following.Username" class="tweet-username-link">
+                                        <span class="text-muted">@($"@{following.Username}")</span>
+                                        @if(Model.CurrentUser.Username != following.Username)
                                         {
-                                            if(Model.IsFollower[follower.UserId])
+                                            if(Model.IsFollower[following.UserId])
                                             {
                                                 <span class="follows-you-box text-muted">Follows you</span>
                                             }
@@ -46,16 +46,16 @@
                                 </div>
                             </div>
                             
-                            <p class="card-text mt-2">@follower.Bio</p>
+                            <p class="card-text mt-2">@following.Bio</p>
                         </div>
                     </div>
                     <div>
-                        @if(Model.CurrentUser.Username != follower.Username)
+                        @if(Model.CurrentUser.Username != following.Username)
                         {
-                            <form method="post" asp-action="@(Model.IsFollowing[follower.UserId] ? "Unfollow" : "Follow")" asp-controller="Users" class="ms-auto follow-form">
-                                <input type="hidden" name="@(Model.IsFollowing[follower.UserId] ? "userIdToUnfollow" : "userIdToFollow")" value="@follower.UserId"/>
-                                <button type="submit" class="btn @(Model.IsFollowing[follower.UserId] ? "btn-danger" : "btn-primary") btn-follow-unfollow-custom">
-                                    @(Model.IsFollowing[follower.UserId] ? "Unfollow" : "Follow")
+                            <form method="post" asp-action="@(Model.IsFollowing[following.UserId] ? "Unfollow" : "Follow")" asp-controller="Users" class="ms-auto follow-form">
+                                <input type="hidden" name="@(Model.IsFollowing[following.UserId] ? "userIdToUnfollow" : "userIdToFollow")" value="@following.UserId"/>
+                                <button type="submit" class="btn @(Model.IsFollowing[following.UserId] ? "btn-danger" : "btn-primary") btn-follow-unfollow-custom">
+                                    @(Model.IsFollowing[following.UserId] ? "Unfollow" : "Follow")
                                 </button>
                             </form>
                         }
@@ -67,8 +67,8 @@
     else
     {
         <div class="container custom-container-followers">
-            <h3>@($"@{Model.User.Username}") doesn’t have any verified followers.</h3>
-            <small>When someone verified follows this account, they’ll show up here.</small>
+            <h3>@($"@{Model.User.Username}") isn’t following anyone</h3>
+            <small>Once they follow accounts, they’ll show up here.</small>
         </div>
     }
 </div>
