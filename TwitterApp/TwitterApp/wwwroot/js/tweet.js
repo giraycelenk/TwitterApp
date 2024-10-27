@@ -93,3 +93,29 @@ $(document).ready(function() {
         });
     });
 });
+
+function deleteTweet(event, form) {
+    event.preventDefault();
+
+    if (!confirm('Are you sure you want to delete this tweet?')) {
+        return false;
+    }
+
+    var tweetId = form.tweetId.value;
+
+    $.ajax({
+        url: '/Tweets/DeleteTweet',
+        type: 'POST',
+        data: { tweetId: tweetId },
+        success: function(response) {
+            if (response.success) {
+                location.reload(); 
+            } else {
+                alert('An error occurred while deleting the tweet.');
+            }
+        },
+        error: function() {
+            alert('An error occurred while deleting the tweet.');
+        }
+    });
+}

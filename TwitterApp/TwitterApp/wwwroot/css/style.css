@@ -405,12 +405,38 @@ body {
 }
 .is-mentioned-tweet{
     padding-bottom: 0px;
+    position: relative;
 }
 .is-mention-tweet{
     padding-top: 0px;
+    position: relative;
 }
 
 .card-body-details {
     padding-top: 0 !important;
 }
-
+.delete-tweet-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #dc3545; 
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    z-index: 1; 
+}
+.custom-card-deleted-tweet-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh; 
+    padding: 20px; 
+}
+.card-body.custom-card-deleted-tweet-page {
+    flex-grow: 1;
+}
+.deleted-tweet-page-btn{
+    border-radius: 25px;
+    position: center;
+}

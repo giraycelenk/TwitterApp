@@ -46,6 +46,12 @@ namespace TwitterApp.Controllers
             return RedirectToAction("Index","Home");
         }
         [HttpPost]
+        public IActionResult DeleteTweet(int tweetId)
+        {
+            _tweetRepository.DeleteTweet(tweetId);
+            return Json(new { success = true });
+        }
+        [HttpPost]
         public IActionResult LikeTweet(int tweetId)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));

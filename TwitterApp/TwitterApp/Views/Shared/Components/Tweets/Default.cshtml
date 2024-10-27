@@ -45,6 +45,15 @@
                         </div>
                         <p class="card-text mt-2">@tweet.MentionedTweet.Content</p>
                     </div>
+                    @if(tweet.MentionedTweet.User.UserId == Model.User.UserId)
+                    {
+                        <form class="delete-tweet-form" onsubmit="return deleteTweet(event, this);">
+                            <input type="hidden" name="tweetId" value="@tweet.TweetId" />
+                            <button type="submit" class="delete-tweet-button">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </form>
+                    }
                 </div>
                 <div>
                     <div class="tweet-actions">
@@ -54,8 +63,8 @@
                                 asp-route-tweetId="@tweet.MentionedTweet.TweetId" class="reply">
                                 <i class="far fa-comment"></i>
                             </a>
-                            <small class="mention-count @(tweet.MentionedTweet.Mentions.Count() > 0 ? "visible" : "")">
-                                @tweet.MentionedTweet.Mentions.Count()
+                            <small class="mention-count @(tweet.MentionedTweet.Mentions.Where(m => m.MentionTweet.IsDeleted == false).Count() > 0 ? "visible" : "")">
+                                @tweet.MentionedTweet.Mentions.Where(m => m.MentionTweet.IsDeleted == false).Count()
                             </small>
                         </div>
                         <div>
@@ -84,64 +93,75 @@
             </div>
             
         }
-        <div class="card-body @(tweet.IsMentionTweet == true ? "is-mention-tweet" : "")">
-                <div class="d-flex justify-content-start align-items-center">
-                    <a href="/@tweet.User.Username">
-                        <img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/>
-                    </a>
-                    <div>
-                        @if(Model.FollowedRetweetsUsers.ContainsKey(tweet.TweetId))
-                        {
-                            <small>
-                                <i class="fa fa-retweet text-secondary"></i> 
-                                @{
-                                    var linkText = Model.IsProfilePage 
-                                        ? (Model.PageUser.UserId == Model.User.UserId ? "You reposted" : $"{Model.FollowedRetweetsUsers[tweet.TweetId].Name} reposted")
-                                        : (Model.FollowedRetweetsUsers.ContainsKey(tweet.TweetId) && Model.FollowedRetweetsUsers[tweet.TweetId].Name == Model.User.Name 
-                                            ? "You reposted" 
-                                            : $"{Model.FollowedRetweetsUsers[tweet.TweetId].Name} reposted");
+            <div class="card-body @(tweet.IsMentionTweet == true ? "is-mention-tweet" : "")">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <a href="/@tweet.User.Username">
+                            <img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/>
+                        </a>
+                        <div>
+                            @if(Model.FollowedRetweetsUsers.ContainsKey(tweet.TweetId))
+                            {
+                                <small>
+                                    <i class="fa fa-retweet text-secondary"></i> 
+                                    @{
+                                        var linkText = Model.IsProfilePage 
+                                            ? (Model.PageUser.UserId == Model.User.UserId ? "You reposted" : $"{Model.FollowedRetweetsUsers[tweet.TweetId].Name} reposted")
+                                            : (Model.FollowedRetweetsUsers.ContainsKey(tweet.TweetId) && Model.FollowedRetweetsUsers[tweet.TweetId].Name == Model.User.Name 
+                                                ? "You reposted" 
+                                                : $"{Model.FollowedRetweetsUsers[tweet.TweetId].Name} reposted");
+                                        
+                                        var username = Model.FollowedRetweetsUsers.ContainsKey(tweet.TweetId) ? Model.FollowedRetweetsUsers[tweet.TweetId].Username : Model.User.Username;
+                                    }
+                                    <a href="/@username" class="gray-link">@linkText</a>
+                                </small> 
+                            }
+                            <div class="d-flex align-items-center">
+                                <a href="/@tweet.User.Username" class="tweet-user-name-link"><h6 class="card-title mb-0 me-1" >@tweet.User.Name</h6></a>
+                                <small><a href="/@tweet.User.Username" class="tweet-username-link">@($"@{tweet.User.Username}") </a>· 
+                                    @{
+                                        DateTime tweetDate = @Model.TweetsDates[tweet.TweetId];
+                                        DateTime now = DateTime.Now;
+                                        TimeSpan timeDifference = now - tweetDate;
+                                        string timeAgo;
                                     
-                                    var username = Model.FollowedRetweetsUsers.ContainsKey(tweet.TweetId) ? Model.FollowedRetweetsUsers[tweet.TweetId].Username : Model.User.Username;
-                                }
-                                <a href="/@username" class="gray-link">@linkText</a>
-                            </small> 
-                        }
-                        <div class="d-flex align-items-center">
-                            <a href="/@tweet.User.Username" class="tweet-user-name-link"><h6 class="card-title mb-0 me-1" >@tweet.User.Name</h6></a>
-                            <small><a href="/@tweet.User.Username" class="tweet-username-link">@($"@{tweet.User.Username}") </a>· 
-                                @{
-                                    DateTime tweetDate = @Model.TweetsDates[tweet.TweetId];
-                                    DateTime now = DateTime.Now;
-                                    TimeSpan timeDifference = now - tweetDate;
-                                    string timeAgo;
-                                
-                                    if (timeDifference.TotalMinutes < 60) 
-                                    {
-                                        timeAgo = $"{(int)timeDifference.TotalMinutes}m";
+                                        if (timeDifference.TotalMinutes < 60) 
+                                        {
+                                            timeAgo = $"{(int)timeDifference.TotalMinutes}m";
+                                        }
+                                        else if (timeDifference.TotalHours < 24) 
+                                        {
+                                            timeAgo = $"{(int)timeDifference.TotalHours}h";
+                                        }
+                                        else 
+                                        {
+                                            timeAgo = $"{(int)timeDifference.TotalDays}d";
+                                        }
+                                        string fullDate = tweetDate.ToString("h:mm tt · MMM d, yyyy");
                                     }
-                                    else if (timeDifference.TotalHours < 24) 
-                                    {
-                                        timeAgo = $"{(int)timeDifference.TotalHours}h";
-                                    }
-                                    else 
-                                    {
-                                        timeAgo = $"{(int)timeDifference.TotalDays}d";
-                                    }
-                                    string fullDate = tweetDate.ToString("h:mm tt · MMM d, yyyy");
-                                }
-                                <span class="time-ago-container">
-                                    <a href="@Url.Action("TweetDetails", "Tweets", new { username = @tweet.User.Username, tweetid = @tweet.TweetId })" class="tweet-details-link">
-                                        @timeAgo
-                                    </a>
-                                    <span class="tooltip">@fullDate</span>
-                                </span>
-                            </small>
+                                    <span class="time-ago-container">
+                                        <a href="@Url.Action("TweetDetails", "Tweets", new { username = @tweet.User.Username, tweetid = @tweet.TweetId })" class="tweet-details-link">
+                                            @timeAgo
+                                        </a>
+                                        <span class="tooltip">@fullDate</span>
+                                    </span>
+                                </small>
+                            </div>
+                            @if(tweet.IsMentionTweet == true)
+                            {
+                                <small>Replying to <a href="/@tweet.MentionedTweet.User.Username" class="tweet-username-link-reply">@($"@{tweet.MentionedTweet.User.Username}") </a></small>
+                            }
+                            <p class="card-text mt-2">@tweet.Content</p>
                         </div>
-                        @if(tweet.IsMentionTweet == true)
+                        @if(tweet.User.UserId == Model.User.UserId)
                         {
-                            <small>Replying to <a href="/@tweet.MentionedTweet.User.Username" class="tweet-username-link-reply">@($"@{tweet.MentionedTweet.User.Username}") </a></small>
+                            <form class="delete-tweet-form" onsubmit="return deleteTweet(event, this);">
+                                <input type="hidden" name="tweetId" value="@tweet.TweetId" />
+                                <button type="submit" class="delete-tweet-button">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
                         }
-                        <p class="card-text mt-2">@tweet.Content</p>
                     </div>
                 </div>
                 <div>
@@ -152,8 +172,8 @@
                                 asp-route-tweetId="@tweet.TweetId" class="reply">
                                 <i class="far fa-comment"></i>
                             </a>
-                            <small class="mention-count @(tweet.Mentions.Count() > 0 ? "visible" : "")">
-                                @tweet.Mentions.Count()
+                            <small class="mention-count @(tweet.Mentions.Where(m => m.MentionTweet.IsDeleted == false).Count() > 0 ? "visible" : "")">
+                                @tweet.Mentions.Where(m => m.MentionTweet.IsDeleted == false).Count()
                             </small>
                         </div>
                         <div>

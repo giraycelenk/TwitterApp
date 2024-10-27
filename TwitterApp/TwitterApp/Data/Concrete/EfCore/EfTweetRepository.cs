@@ -82,6 +82,15 @@ namespace TwitterApp.Data.Concrete.EfCore
             _context.Entry(tweet).State = EntityState.Modified;
             _context.SaveChanges();
         }
+        public void DeleteTweet(int tweetId)
+        {
+            var tweet = _context.Tweets.FirstOrDefault(t => t.TweetId == tweetId);
+            if (tweet != null)
+            {
+                tweet.IsDeleted = true;
+                _context.SaveChanges();
+            }
+        }
         public Task<List<Tweet>> GetAllTweetsAsync()
         {
             return _context.Tweets
@@ -174,6 +183,7 @@ namespace TwitterApp.Data.Concrete.EfCore
             .Include(t=>t.Likes)
             .Include(t=>t.Retweets)
             .Include(t=>t.Mentions)
+            .Where(t=>!t.IsDeleted)
             .FirstOrDefaultAsync(t => t.TweetId == tweetId);
             
             viewModel.Tweet = tweet;
@@ -207,6 +217,7 @@ namespace TwitterApp.Data.Concrete.EfCore
                 .Include(m => m.MentionTweet) 
                 .ThenInclude(t=>t.Mentions)
                 .Select(m => m.MentionTweet)
+                .Where(m=>!m.IsDeleted)
                 .OrderByDescending(m=>m.TweetDate) 
                 .ToListAsync(); 
 

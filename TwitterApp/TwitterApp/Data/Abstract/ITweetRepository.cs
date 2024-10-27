@@ -13,6 +13,7 @@ namespace TwitterApp.Data.Abstract
         void AddRetweet(int tweetId, int userId);
         void RemoveRetweet(int tweetId, int userId);
         void UpdateTweet(Tweet tweet);
+        void DeleteTweet(int tweetId);
         Task AddMention(int tweetId, int userId,TweetCreateModel tweet);
         Task<List<Tweet>> GetAllTweetsAsync();
         Task<List<Tweet>> GetAllTweetsAndRetweetsByUserIdAsync(int userId,bool isProfilePage);
