@@ -77,7 +77,7 @@ namespace TwitterApp.Controllers
             return RedirectToAction("Login");
         }
         [Authorize]
-        public async Task<IActionResult> Profile(string username)
+        public async Task<IActionResult> Profile(string username,string tab="")
         {
             if (User.Identity == null || !User.Identity.IsAuthenticated)
             {
@@ -94,10 +94,22 @@ namespace TwitterApp.Controllers
             {
                 return NotFound();
             }
-            
-            ProfileViewModel profileModel = await _userRepository.GetProfileByUserNameAsync(int.Parse(userIdClaim),username);
+
+            ProfileViewModel profileModel = new ProfileViewModel();
+
+            if(tab=="likes")
+            {
+                if(_userRepository.GetIdByUsername(username) != int.Parse(userIdClaim))
+                {
+                    profileModel = await _userRepository.GetProfileByUserNameAsync(int.Parse(userIdClaim),username,tab = "");
+                    return Redirect("/"+username);  
+                }
+            }
+            profileModel = await _userRepository.GetProfileByUserNameAsync(int.Parse(userIdClaim),username,tab);
+
             return View(profileModel);      
         }
+        
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Follow(int userIdToFollow)
@@ -145,8 +157,9 @@ namespace TwitterApp.Controllers
         public async Task<IActionResult> Following(string username)
         {
             var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            FollowViewModel followerViewModel = await _userRepository.GetFollowingForProfileAsync(username,currentUserId);
-            return View(followerViewModel);
+            FollowViewModel followingViewModel = await _userRepository.GetFollowingForProfileAsync(username,currentUserId);
+            return View(followingViewModel);
         }
+        
     }
 }

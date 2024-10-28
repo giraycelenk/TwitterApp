@@ -457,6 +457,30 @@ namespace TwitterApp.Data.Concrete.EfCore
             return tweetsId;
         }
 
-
+        public async Task<TweetViewModel> GetUserLikesByUsernameAsync(int currentUserId,int userId,User currentUser,User pageUser)
+        {
+            var viewModel = new TweetViewModel
+            {
+                Tweets = new List<Tweet>(),
+                IsProfilePage = true,
+                User = currentUser,
+                PageUser = pageUser,
+                IsLikedByCurrentUser = new Dictionary<int, bool>(),
+                IsRetweetedByCurrentUser = new Dictionary<int, bool>()
+            };
+            var tweets = await _context.Likes.Where(l => l.UserId == userId).Select(l => l.Tweet).ToListAsync();
+            viewModel.Tweets.AddRange(tweets);
+            viewModel.IsLikedByCurrentUser = _context
+                                            .Tweets
+                                            .Include(t => t.Likes)
+                                            .Include(t => t.User)
+                                            .ToDictionary(t => t.TweetId, t => t.Likes.Any(l => l.UserId == currentUserId));
+            viewModel.IsRetweetedByCurrentUser = _context
+                                                .Tweets
+                                                .Include(t => t.Retweets)
+                                                .Include(t => t.User)
+                                                .ToDictionary(t => t.TweetId, t => t.Retweets.Any(r => r.UserId == currentUserId));
+            return viewModel;
+        }
     }
 }

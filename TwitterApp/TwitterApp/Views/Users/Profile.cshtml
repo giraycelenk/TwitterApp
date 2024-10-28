@@ -8,7 +8,7 @@
         <div>
             <span class="fw-bold back-post-span">@Model.User.Name</span>
             <div>
-                @Model.User.Tweets.Count() Posts
+                @Model.User.Tweets.Where(t => t.IsDeleted == false).Count() Posts
             </div>
         </div>
     </div>
@@ -59,8 +59,26 @@
         </div>
     </div>
     <div class="mt-4">
-        <h4 class="ml-3">Tweets</h4>
-        <vc:tweets is-profile-page="true" username="@Model.User.Username"></vc:tweets>
+        <div class="btn-group tweet-button-group" role="group" aria-label="Tweet Navigation">
+            <a href="/@Model.User.Username">
+                <button type="button" class="btn btn-outline-primary">Tweets</button>
+            </a>
+            <button type="button" class="btn btn-outline-primary">Replies</button>
+            @if(Model.User.UserId == Model.CurrentUser.UserId)
+            {
+                <a href="/@Model.User.Username/likes">
+                    <button type="button" class="btn btn-outline-primary">Likes</button>
+                </a>
+            }
+        </div>
+        @if(Model.Tab == "likes")
+        {
+            <vc:profile-likes username="@Model.User.Username"></vc:profile-likes>
+        }
+        else
+        {
+            <vc:tweets is-profile-page="true" username="@Model.User.Username"></vc:tweets>
+        }
     </div>
 </div>
 

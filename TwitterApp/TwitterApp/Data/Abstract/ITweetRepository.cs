@@ -24,6 +24,7 @@ namespace TwitterApp.Data.Abstract
         Task<List<Retweet>> GetUserAndFollowedRetweetsForDictionaryAsync(int userId);
         Task<Dictionary<int,User>> GetFollowedRetweetsDictionaryAsync(int userId);
         Task<TweetViewModel> GetTweetsAndActivitiesByUserIdAsync(int currentUserId,int userId,User currentUser,User pageUser,bool isProfilePage);
+        Task<TweetViewModel> GetUserLikesByUsernameAsync(int currentUserId,int userId,User currentUser,User pageUser);
         Task<TweetDetailsViewModel> GetTweetDetailsAsync(int tweetId,int currentUserId);
         Task<List<Tweet>> GetTweetMentionsAsync(int tweetId);
         int ProfilePageAndIdControl(int currentUserId,int userId,bool isProfilePage);

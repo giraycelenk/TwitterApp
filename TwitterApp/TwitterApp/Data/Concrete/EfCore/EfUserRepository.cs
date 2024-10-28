@@ -185,7 +185,7 @@ namespace TwitterApp.Data.Concrete.EfCore
                                 .FirstOrDefaultAsync(f => f.FollowerUserId == followerUserId && f.FollowingUserId == followingUserId);
         }
 
-        public async Task<ProfileViewModel> GetProfileByUserNameAsync(int userId,string username)
+        public async Task<ProfileViewModel> GetProfileByUserNameAsync(int userId,string username,string tab)
         {
 
             var currentUser = await _context.Users
@@ -209,8 +209,10 @@ namespace TwitterApp.Data.Concrete.EfCore
             return new ProfileViewModel
             {
                 User = user,
+                CurrentUser = currentUser,
                 IsFollowing = isFollowing,
-                IsFollower = isFollower
+                IsFollower = isFollower,
+                Tab = tab
             };
         }
 
