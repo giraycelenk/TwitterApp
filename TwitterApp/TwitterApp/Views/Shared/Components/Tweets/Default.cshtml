@@ -48,9 +48,9 @@
                     @if(tweet.MentionedTweet.User.UserId == Model.User.UserId)
                     {
                         <form class="delete-tweet-form" onsubmit="return deleteTweet(event, this);">
-                            <input type="hidden" name="tweetId" value="@tweet.TweetId" />
+                            <input type="hidden" name="tweetId" value="@tweet.MentionedTweet.TweetId"/>
                             <button type="submit" class="delete-tweet-button">
-                                <i class="fas fa-times"></i>
+                                <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </form>
                     }
@@ -156,9 +156,9 @@
                         @if(tweet.User.UserId == Model.User.UserId)
                         {
                             <form class="delete-tweet-form" onsubmit="return deleteTweet(event, this);">
-                                <input type="hidden" name="tweetId" value="@tweet.TweetId" />
+                                <input type="hidden" name="tweetId" value="@tweet.TweetId"/>
                                 <button type="submit" class="delete-tweet-button">
-                                    <i class="fas fa-times"></i>
+                                    <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </form>
                         }
