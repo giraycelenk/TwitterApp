@@ -106,3 +106,57 @@
     padding: 0px;
     padding-top: 15px;
 }
+.tweet-button-group .btn {
+    width: 120px;
+    color: rgb(85, 85, 85);
+    border: none;
+    font-weight: bold;
+}
+
+.tweet-button-group .btn:hover,
+.tweet-button-group .btn:focus,
+.tweet-button-group .btn.active {
+    background-color: #1DA1F2; 
+    color: rgb(85, 85, 85);
+}
+.btn.active {
+    background-color: #007bff;
+    color: rgb(85, 85, 85);
+
+}
+
+.tweet-button-group {
+    display: flex;
+    gap: 0; 
+    justify-content: space-around;
+}
+.tweet-button-group > a{
+    flex-grow: 1;
+    text-align: center;
+    text-decoration: none;
+    padding: 1rem 0;
+    color: rgb(83, 100, 113);
+    font-weight: 600;
+}
+
+.tweet-button-group > a.active{
+    color: rgb(3, 3, 4);
+    text-underline-offset: 16px;
+    text-decoration: underline rgb(29, 155, 240);
+
+}
+
+.tweet-button-group a:not(.active):hover,
+.tweet-button-group a:not(.active):focus,
+.tweet-button-group a:not(.active):active {
+    background-color:#dbdddf;
+    color: rgb(85, 85, 85);
+    text-decoration: none;
+}
+
+.tweet-button-group a.active:hover,
+.tweet-button-group a.active:focus,
+.tweet-button-group a.active:active {
+    background-color:#dbdddf;
+    color: rgb(85, 85, 85);
+}

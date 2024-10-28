@@ -60,14 +60,17 @@
     </div>
     <div class="mt-4">
         <div class="btn-group tweet-button-group" role="group" aria-label="Tweet Navigation">
-            <a href="/@Model.User.Username">
-                <button type="button" class="btn btn-outline-primary">Tweets</button>
+            <a href="/@Model.User.Username" class="@(Model.Tab == "" ? "active" : "" )">
+                Posts
             </a>
-            <button type="button" class="btn btn-outline-primary">Replies</button>
+            <a href="/@Model.User.Username/with_replies" class="@(Model.Tab == "replies" ? "active" : "" )">
+                Replies
+            </a>
+            
             @if(Model.User.UserId == Model.CurrentUser.UserId)
             {
-                <a href="/@Model.User.Username/likes">
-                    <button type="button" class="btn btn-outline-primary">Likes</button>
+                <a href="/@Model.User.Username/likes" class="@(Model.Tab == "likes" ? "active" : "" )">
+                    Likes
                 </a>
             }
         </div>
