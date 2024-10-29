@@ -76,11 +76,15 @@
         </div>
         @if(Model.Tab == "likes")
         {
-            <vc:profile-likes username="@Model.User.Username"></vc:profile-likes>
+            <vc:profile-likes is-profile-page="true" username="@Model.User.Username"></vc:profile-likes>
+        }
+        else if(Model.Tab == "replies")
+        {
+            <vc:tweets is-profile-page="true" username="@Model.User.Username"></vc:tweets>
         }
         else
         {
-            <vc:tweets is-profile-page="true" username="@Model.User.Username"></vc:tweets>
+            <vc:profile-tweets is-profile-page="true" username="@Model.User.Username"></vc:profile-tweets>
         }
     </div>
 </div>
