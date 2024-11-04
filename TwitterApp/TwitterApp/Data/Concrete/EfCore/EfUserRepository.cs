@@ -215,6 +215,15 @@ namespace TwitterApp.Data.Concrete.EfCore
                 Tab = tab
             };
         }
+        public void Update(User user)
+        {
+            _context.Users.Update(user);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
 
         
     }

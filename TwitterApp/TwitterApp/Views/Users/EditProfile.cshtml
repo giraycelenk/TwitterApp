@@ -1,0 +1,24 @@
+@model EditProfileViewModel
+<form asp-action="EditProfile" enctype="multipart/form-data">
+    <div>
+        <label>Name</label>
+        <input asp-for="Name" />
+    </div>
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" />
+    </div>
+    <div>
+        <label>Biography</label>
+        <textarea asp-for="Bio"></textarea>
+    </div>
+    <div>
+        <label>Location</label>
+        <input asp-for="Location" />
+    </div>
+    <div>
+        <label>Birth Date</label>
+        <input asp-for="BirthDate" type="date" />
+    </div>
+    <button type="submit">Save</button>
+</form>

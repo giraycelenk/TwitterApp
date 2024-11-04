@@ -160,6 +160,43 @@ namespace TwitterApp.Controllers
             FollowViewModel followingViewModel = await _userRepository.GetFollowingForProfileAsync(username,currentUserId);
             return View(followingViewModel);
         }
+        public async Task<IActionResult> EditProfile()
+        {
+            var currentUser = await _userRepository.Users.FirstOrDefaultAsync(u => u.UserId == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            var model = new EditProfileViewModel
+            {
+                Name = currentUser.Name,
+                Email = currentUser.Email,
+                Bio = currentUser.Bio,
+                Location = currentUser.Location,
+                BirthDate = currentUser.BirthDate,
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var currentUser = await _userRepository.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+
+                if (currentUser != null)
+                {
+                    currentUser.Name = model.Name;
+                    currentUser.Email = model.Email;
+                    currentUser.Bio = model.Bio;
+                    currentUser.BirthDate = model.BirthDate;
+                    currentUser.Location = model.Location;
+
+                    _userRepository.Update(currentUser);
+                    await _userRepository.SaveChangesAsync();
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            return View("EditProfile", model);
+        }
         
     }
 }

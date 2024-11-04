@@ -18,7 +18,8 @@ namespace TwitterApp.Data.Abstract
         Task<bool> UnfollowUserAsync(int currentUserId, int userIdToUnfollow);
         Task<UserFollow> GetFollowAsync(int followerUserId, int followingUserId);
         Task<ProfileViewModel> GetProfileByUserNameAsync(int userId,string username,string tab);
-        
+        void Update(User user);
+        Task SaveChangesAsync();
 
     }
 }
