@@ -139,6 +139,14 @@ body {
     font-weight: bold;
     margin-right: 1em;
 }
+.btn-edit-profile-custom {
+    border-radius: 25px;
+    padding: 6px 21px; 
+    font-size: 16px; 
+    background-color: black;
+    font-weight: bold;
+    margin-right: 1em;
+}
 .tweet-actions {
     display: flex;
     justify-content: space-between;

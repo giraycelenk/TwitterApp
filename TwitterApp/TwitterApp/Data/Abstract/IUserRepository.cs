@@ -7,6 +7,8 @@ namespace TwitterApp.Data.Abstract
     {
         IQueryable<User> Users {get;}
         void CreateUser(User User);
+        Task UpdateUser(EditProfileViewModel Model, User User);
+        Task SaveChangesAsync();
         User GetUserById(int UserId);
         List<Tweet> GetTweetsByUserId(int UserId);
         List<User> GetFollowers(int UserId);
@@ -18,8 +20,6 @@ namespace TwitterApp.Data.Abstract
         Task<bool> UnfollowUserAsync(int currentUserId, int userIdToUnfollow);
         Task<UserFollow> GetFollowAsync(int followerUserId, int followingUserId);
         Task<ProfileViewModel> GetProfileByUserNameAsync(int userId,string username,string tab);
-        void Update(User user);
-        Task SaveChangesAsync();
-
+        
     }
 }

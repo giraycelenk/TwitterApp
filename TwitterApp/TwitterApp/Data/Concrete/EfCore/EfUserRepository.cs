@@ -215,9 +215,20 @@ namespace TwitterApp.Data.Concrete.EfCore
                 Tab = tab
             };
         }
-        public void Update(User user)
+        public async Task UpdateUser(EditProfileViewModel Model, User User)
         {
-            _context.Users.Update(user);
+            if (User != null)
+            {
+                User.Username = Model.Username;
+                User.Name = Model.Name;
+                User.Email = Model.Email;
+                User.Bio = Model.Bio;
+                User.BirthDate = Model.BirthDate;
+                User.Location = Model.Location;
+
+                _context.Users.Update(User);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task SaveChangesAsync()

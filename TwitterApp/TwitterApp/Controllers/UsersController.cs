@@ -165,6 +165,7 @@ namespace TwitterApp.Controllers
             var currentUser = await _userRepository.Users.FirstOrDefaultAsync(u => u.UserId == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)));
             var model = new EditProfileViewModel
             {
+                Username = currentUser.Username,
                 Name = currentUser.Name,
                 Email = currentUser.Email,
                 Bio = currentUser.Bio,
@@ -184,16 +185,19 @@ namespace TwitterApp.Controllers
 
                 if (currentUser != null)
                 {
-                    currentUser.Name = model.Name;
-                    currentUser.Email = model.Email;
-                    currentUser.Bio = model.Bio;
-                    currentUser.BirthDate = model.BirthDate;
-                    currentUser.Location = model.Location;
-
-                    _userRepository.Update(currentUser);
-                    await _userRepository.SaveChangesAsync();
+                    var updateUser = await _userRepository.Users.FirstOrDefaultAsync(x => x.Username == model.Username || x.Email == model.Email);
+                    if(updateUser == null || (currentUser.Email == updateUser.Email && currentUser.Username == updateUser.Username))
+                    {
+                        _userRepository.UpdateUser(model,currentUser);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("","Username or Email already exists");
+                        return View("EditProfile", model);
+                    }
+                    
                 }
-                return RedirectToAction("Index", "Home");
+                return Redirect("/"+currentUser.Username); 
             }
             return View("EditProfile", model);
         }
