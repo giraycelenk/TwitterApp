@@ -15,7 +15,7 @@
     <div class="cover-photo" style="background: url('img/@Model.User.HeaderImage') no-repeat center center; height: 200px; background-size: cover;"></div>
     <div class="ml-3">
         <div class="d-flex align-items-center">
-            <img src="~/img/@Model.User.Image" alt="Profil Fotoğrafı" class="profile-photo">
+            <img src="~/img/@Model.User.ImageUrl" alt="Profile Image" class="profile-photo">
             @if (User.Identity != null && User.Identity.IsAuthenticated && Model.User.UserId != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
             {
                 <form method="post" asp-action="@(Model.IsFollowing ? "Unfollow" : "Follow")" asp-controller="Users" class="ms-auto follow-form">

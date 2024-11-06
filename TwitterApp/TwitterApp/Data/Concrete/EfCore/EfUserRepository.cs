@@ -187,7 +187,6 @@ namespace TwitterApp.Data.Concrete.EfCore
 
         public async Task<ProfileViewModel> GetProfileByUserNameAsync(int userId,string username,string tab)
         {
-
             var currentUser = await _context.Users
                                     .Include(u => u.Tweets)
                                     .Include(u => u.Likes)
@@ -217,7 +216,7 @@ namespace TwitterApp.Data.Concrete.EfCore
         }
         public async Task UpdateUser(EditProfileViewModel Model, User User)
         {
-            if (User != null)
+            if(User != null)
             {
                 User.Username = Model.Username;
                 User.Name = Model.Name;
@@ -225,17 +224,29 @@ namespace TwitterApp.Data.Concrete.EfCore
                 User.Bio = Model.Bio;
                 User.BirthDate = Model.BirthDate;
                 User.Location = Model.Location;
+                if(Model.ProfileImage != null)
+                {
+                    var userFolder = Path.Combine("wwwroot/img/profileimg", User.Username);
+                    if (!Directory.Exists(userFolder))
+                    {
+                        Directory.CreateDirectory(userFolder);
+                    }
 
-                _context.Users.Update(User);
+                    var fileExtension = Path.GetExtension(Model.ProfileImage.FileName);
+                    var fileName = string.Format($"{Guid.NewGuid()}{fileExtension}");
+                    var filePath = Path.Combine(userFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Model.ProfileImage.CopyToAsync(stream);
+                    }
+    	            var ImageUrl = "profileimg/"+User.Username+"/"+fileName;
+                    User.ImageUrl = ImageUrl;
+                }
+                _context.Entry(User).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
         }
 
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
-
-        
     }
 }

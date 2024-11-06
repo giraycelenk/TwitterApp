@@ -8,7 +8,6 @@ namespace TwitterApp.Data.Abstract
         IQueryable<User> Users {get;}
         void CreateUser(User User);
         Task UpdateUser(EditProfileViewModel Model, User User);
-        Task SaveChangesAsync();
         User GetUserById(int UserId);
         List<Tweet> GetTweetsByUserId(int UserId);
         List<User> GetFollowers(int UserId);

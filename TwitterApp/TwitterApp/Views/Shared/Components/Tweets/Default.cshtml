@@ -9,7 +9,7 @@
             <div class="card-body @(tweet.IsMentionTweet == true ? "is-mentioned-tweet" : "")">
                 <div class="d-flex justify-content-start align-items-center">
                     <a href="/@tweet.MentionedTweet.User.Username">
-                        <img src="~/img/@tweet.MentionedTweet.User.Image" alt="@tweet.MentionedTweet.User.Name" class="avatar me-2"/>
+                        <img src="~/img/@tweet.MentionedTweet.User.ImageUrl" alt="@tweet.MentionedTweet.User.Name" class="avatar me-2"/>
                     </a>
                     <div>
                         <div class="d-flex align-items-center">
@@ -97,7 +97,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
                         <a href="/@tweet.User.Username">
-                            <img src="~/img/@tweet.User.Image" alt="@tweet.User.Name" class="avatar me-2"/>
+                            <img src="~/img/@tweet.User.ImageUrl" alt="@tweet.User.Name" class="avatar me-2"/>
                         </a>
                         <div>
                             @if(Model.FollowedRetweetsUsers.ContainsKey(tweet.TweetId))

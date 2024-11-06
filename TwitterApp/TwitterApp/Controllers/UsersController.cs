@@ -46,7 +46,7 @@ namespace TwitterApp.Controllers
                     userClaims.Add(new Claim(ClaimTypes.NameIdentifier, isUser.UserId.ToString()));
                     userClaims.Add(new Claim(ClaimTypes.Name, isUser.Username));
                     userClaims.Add(new Claim(ClaimTypes.GivenName, isUser.Name ?? ""));
-                    userClaims.Add(new Claim(ClaimTypes.UserData,isUser.Image ?? ""));
+                    userClaims.Add(new Claim(ClaimTypes.UserData,isUser.ImageUrl ?? ""));
 
                     var claimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -188,7 +188,7 @@ namespace TwitterApp.Controllers
                     var updateUser = await _userRepository.Users.FirstOrDefaultAsync(x => x.Username == model.Username || x.Email == model.Email);
                     if(updateUser == null || (currentUser.Email == updateUser.Email && currentUser.Username == updateUser.Username))
                     {
-                        _userRepository.UpdateUser(model,currentUser);
+                        await _userRepository.UpdateUser(model,currentUser);
                     }
                     else
                     {
