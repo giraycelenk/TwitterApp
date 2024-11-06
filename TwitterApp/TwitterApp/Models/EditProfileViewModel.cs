@@ -16,5 +16,6 @@ namespace TwitterApp.Models
         [Required(ErrorMessage = "Birth Date is required.")]
         public DateTime BirthDate { get; set; }
         public IFormFile? ProfileImage { get; set; }
+        public IFormFile? ProfileHeaderImage { get; set; }
     }
 }

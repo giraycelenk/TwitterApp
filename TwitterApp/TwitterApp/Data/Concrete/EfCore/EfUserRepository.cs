@@ -243,6 +243,25 @@ namespace TwitterApp.Data.Concrete.EfCore
     	            var ImageUrl = "profileimg/"+User.Username+"/"+fileName;
                     User.ImageUrl = ImageUrl;
                 }
+                if(Model.ProfileHeaderImage != null)
+                {
+                    var userFolder = Path.Combine("wwwroot/img/profileheaderimg", User.Username);
+                    if (!Directory.Exists(userFolder))
+                    {
+                        Directory.CreateDirectory(userFolder);
+                    }
+
+                    var fileExtension = Path.GetExtension(Model.ProfileHeaderImage.FileName);
+                    var fileName = string.Format($"{Guid.NewGuid()}{fileExtension}");
+                    var filePath = Path.Combine(userFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Model.ProfileHeaderImage.CopyToAsync(stream);
+                    }
+    	            var HeaderImageUrl = "profileheaderimg/"+User.Username+"/"+fileName;
+                    User.HeaderImageUrl = HeaderImageUrl;
+                }
                 _context.Entry(User).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }

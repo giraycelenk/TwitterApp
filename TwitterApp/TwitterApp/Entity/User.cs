@@ -8,7 +8,7 @@ namespace TwitterApp.Entity
         public string? Email { get; set; }
         public string? Password { get; set; }
         public string? ImageUrl { get; set; } = string.Empty;
-        public string? HeaderImage { get; set; }
+        public string? HeaderImageUrl { get; set; } = string.Empty;
         public string? Bio { get; set; } 
         public string? Location { get; set; } 
         public DateTime BirthDate { get; set; }
